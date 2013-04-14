@@ -1,0 +1,77 @@
+package calico.plugins.userlist;
+
+import calico.Calico;
+import calico.CalicoOptions;
+import calico.components.menus.CanvasBottomMenuBar;
+import calico.plugins.CalicoPlugin;
+import calico.plugins.userlist.iconsets.CalicoIconManager;
+
+public class UserListPlugin extends CalicoPlugin
+{
+	private static long uuid = 0;
+	private static UserList userList;
+	private static AudioListener audioListener;
+
+	public UserListPlugin()
+	{
+		super();
+		PluginInfo.name = "UserList";
+//		audioListener
+		CalicoIconManager.setIconTheme(this.getClass(), CalicoOptions.core.icontheme);
+	}
+
+	public void onPluginStart()
+	{
+		debug("USER LIST START");
+		userList = new UserList();
+		audioListener = new AudioListener();
+		CanvasBottomMenuBar.addMenuButtonRightAligned(UserListButton.class);
+	}
+
+	public void onPluginEnd()
+	{
+		audioListener.stopCapture();
+		System.out.println("USER LIST SHUTDOWN");
+	}
+
+	public void onException(Exception e)
+	{
+		System.out.println("USER LIST EXCEPTION");
+		e.printStackTrace();
+	}
+	
+	public static void toggleUserList()
+	{
+		if (!userList.visible())
+			userList.show();
+		else
+			userList.hide();
+	}
+	
+	public static void startCapture()
+	{
+		audioListener.startCapture(uuid);
+	}
+	
+	public static void stopCapture()
+	{
+		audioListener.stopCapture();
+	}
+
+	public static long getUUID()
+	{
+		return uuid;
+	}
+
+	public static void setUUID(long u)
+	{
+		uuid = u;
+	}
+
+	@Override
+	public Class<?> getNetworkCommandsClass()
+	{
+		// TODO Auto-generated method stub
+		return UserListNetworkCommands.class;
+	}
+}

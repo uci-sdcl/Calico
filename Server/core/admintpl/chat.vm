@@ -1,0 +1,26 @@
+#parse( "includes/header.vm" )
+
+<h1>Chat Console</h1>
+
+	<fieldset>
+		<textarea readonly="readonly" style="width:95%;font-family:monospace;font-size:12px;background-color:#fff;" rows="10" id="chatlog"></textarea>
+		<br/><br/>
+		Message: <input type="text" id="chat_message" style="width:80%;" /> <input type="button" value="Send" id="send_button" />
+		
+	</fieldset>
+
+
+<script>
+
+new Calico.ChatClient({
+	'history':$('chatlog'),
+	'inputbox':$('chat_message'),
+	'button':$('send_button')
+});
+
+window.onload=function(){
+$('chat_message').focus();
+}
+</script>
+
+#parse( "includes/footer.vm" )

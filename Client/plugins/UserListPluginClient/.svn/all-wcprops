@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/calico3client/!svn/ver/648/plugins/UserListPluginClient
+END
+build.num
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/calico3client/!svn/ver/653/plugins/UserListPluginClient/build.num
+END
+build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/calico3client/!svn/ver/653/plugins/UserListPluginClient/build.xml
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/calico3client/!svn/ver/653/plugins/UserListPluginClient/.project
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/calico3client/!svn/ver/653/plugins/UserListPluginClient/.classpath
+END

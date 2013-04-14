@@ -1,0 +1,123 @@
+#parse( "includes/header.vm" )
+
+
+<h1>Configuration</h1>
+
+
+<form method="post" action="/gui/config/">
+	
+	
+<fieldset>
+	<legend>Server</legend>
+	<dl>
+		<dt>#form_label("IP Address", "Default is 0.0.0.0:27000")</dt>
+		<dd><input type="text" name="config.listen.host" value="$config_listen_host" size="15" /><b>:</b><input type="text" name="config.listen.port" value="$config_listen_port" size="5" /></dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Tickrate", "How many times does the ticker loop per second")</dt>
+		<dd><input type="text" name="config.server.tickrate" size="5" value="$config_server_tickrate" /> ticks per second</dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Enable Autobackup", "Enable server to write an auto backup")</dt>
+		<dd>#form_yesno("config.server.backup.enable_autobackup" $config_server_backup_enable_autobackup)</dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Write backup on tick", "On what tick modulous should the backup write?")</dt>
+		<dd><input type="text" name="config.server.backup.write_on_tick" size="5" value="$config_server_backup_write_on_tick" /> x tickrate</dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Backup filename")</dt>
+		<dd><input type="text" name="config.server.backup.backup_file" size="30" value="$config_server_backup_backup_file" /></dd>
+	</dl>
+</fieldset>
+
+
+<fieldset>
+	<legend>Debug</legend>
+	<dl>
+		<dt>#form_label("Debug Enabled")</dt>
+		<dd>#form_yesno("config.debug.enabled" $config_debug_enabled)</dd>
+	</dl>
+</fieldset>
+
+
+
+<fieldset>
+	<legend>Client</legend>
+	<dl>
+		<dt>#form_label("Thread Sleep Time", "Sleep time after each loop, if this is 0, then server will use 100% cpu")</dt>
+		<dd><input type="text" name="config.client.threadopts.sleeptime" size="5" value="$config_client_threadopts_sleeptime" /> ms</dd>
+	</dl>
+	
+	<dl>
+		<dt>#form_label("Timeout", "When do we assume the client has timed out?")</dt>
+		<dd><input type="text" name="config.client.network.timeout" size="5" value="$config_client_network_timeout" /> ms</dd>
+	</dl>
+	
+	<dl>
+		<dt>#form_label("Coordinate Cluster Size", "Number of coordinate pairs to send in a group (bigger means more memory+network usage)")</dt>
+		<dd><input type="text" name="config.client.network.cluster_size" size="5" value="$config_client_network_cluster_size" /></dd>
+	</dl>
+	
+	<dl>
+		<dt>#form_label("Max Canvas Snapshots", "The maximum number of snapshots that the server will hold (undo history)")</dt>
+		<dd><input type="text" name="config.canvas.max_snapshots" size="5" value="$config_canvas_max_snapshots" /></dd>
+	</dl>
+	
+	
+</fieldset>
+
+
+<fieldset>
+	<legend>UUID Allocator</legend>
+	<dl>
+		<dt>#form_label("Block Size", "This is the number of UUIDs that are sent to the client at once")</dt>
+		<dd><input type="text" name="config.uuid.block_size" size="5" value="$config_uuid_block_size" /></dd>
+	</dl>
+	
+	<dl>
+		<dt>#form_label("Allocation Increment", "When we allocate more UUIDs, how many should we allocate in a single pass")</dt>
+		<dd><input type="text" name="config.uuid.allocation_increment" size="5" value="$config_uuid_allocation_increment" /></dd>
+	</dl>
+	
+	<dl>
+		<dt>#form_label("Minimum Size","At what point should we force more UUIDs to be allocated?")</dt>
+		<dd><input type="text" name="config.uuid.min_size" size="5" value="$config_uuid_min_size" /> spare UUIDs</dd>
+	</dl>
+	
+	
+</fieldset>
+
+
+<fieldset>
+	<legend>Admin Web Interface</legend>
+	<dl>
+		<dt>#form_label("IP Address", "Default is 0.0.0.0:27001")</dt>
+		<dd><input type="text" name="config.admin.listen.host" value="$config_admin_listen_host" size="15" /><b>:</b><input type="text" name="config.admin.listen.port" value="$config_admin_listen_port" size="5" /></dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Timeout")</dt>
+		<dd><input type="text" name="config.admin.listen.timeout" size="5" value="$config_admin_listen_timeout" /> ms</dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Buffer")</dt>
+		<dd><input type="text" name="config.admin.listen.buffer" size="5" value="$config_admin_listen_buffer" /> bytes</dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Use TCP_NODELAY")</dt>
+		<dd>#form_yesno("config.admin.listen.tcp_nodelay" $config_admin_listen_tcp_nodelay)</dd>
+	</dl>
+	<dl>
+		<dt>#form_label("Check for stale connections")</dt>
+		<dd>#form_yesno("config.admin.listen.stale_conn_check" $config_admin_listen_stale_conn_check)</dd>
+	</dl>
+	
+</fieldset>
+
+
+
+#form_submit()
+
+</form>
+
+#parse( "includes/footer.vm" )

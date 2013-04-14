@@ -1,0 +1,109 @@
+package calico.plugins.userlist;
+
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JFileChooser;
+
+import calico.Calico;
+import calico.components.piemenu.PieMenu;
+import calico.components.piemenu.PieMenuButton;
+import calico.controllers.CCanvasController;
+import calico.controllers.CImageController;
+import calico.events.CalicoEventHandler;
+import calico.inputhandlers.InputEventInfo;
+import calico.networking.Networking;
+import calico.networking.netstuff.CalicoPacket;
+import calico.networking.netstuff.NetworkCommand;
+
+public class UserImageCreate extends PieMenuButton //ImageCreate
+{
+	public static int SHOWON = PieMenuButton.SHOWON_SCRAP_MENU;
+	private static long uuid = 0L;
+
+	public UserImageCreate()
+	{
+		super("canvas.image");
+	}
+	
+	public UserImageCreate(long u)
+	{
+		super("canvas.image");
+		uuid = u;
+	}
+	
+	public void onClick(InputEventInfo ev)
+	{
+		super.onClick(ev);
+		chooseImage();
+	}
+	
+	public void chooseImage()
+	{
+		final JFileChooser fc = new JFileChooser();
+		fc.setFileFilter(new ImageFileFilter());
+        int returnVal = fc.showOpenDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent());
+
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+        	File file = fc.getSelectedFile();
+
+            Networking.send(CImageController.getImageTransferPacket(uuid, CCanvasController.getCurrentUUID(), 
+            		-5000, -5000, file));
+            
+    		long cuid = CCanvasController.getCurrentUUID();
+        	long puid = 0L;
+        	String name = file.getName().toLowerCase();
+        	byte[] bytes = CImageController.getBytesFromDisk(file);
+            
+        	// Save image to disk
+        	try
+        	{
+        		CImageController.save_to_disk(uuid, name, bytes);
+            }
+            catch (Exception e)
+            {
+            	e.printStackTrace();
+            }
+            
+            // Send packet to server
+//            CalicoEventHandler.getInstance().fireEvent(
+//            		NetworkCommand.IMAGE_TRANSFER_FILE,
+//            		CalicoPacket.getPacket(
+//            				NetworkCommand.IMAGE_TRANSFER_FILE,
+//            				uuid, cuid, puid, name, bytes.length, bytes));
+//            
+//            Networking.send(CalicoPacket.getPacket(
+//    				NetworkCommand.IMAGE_TRANSFER_FILE,
+//    				uuid, cuid, puid, name, bytes.length, bytes));
+    		
+            // Refresh all User Images
+    		Networking.send(CalicoPacket.getPacket(
+    				NetworkCommand.PRESENCE_LEAVE_CANVAS, cuid));
+    		Networking.send(CalicoPacket.getPacket(
+    				NetworkCommand.PRESENCE_VIEW_CANVAS, cuid));
+        }
+	}
+	
+	public static boolean isImageURL(String text)
+	{
+		String regex = "((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)+\\.(?:gif|jpg|jpeg|png|bmp|GIF|JPEG|JPG|PNG|BMP|Gif|Jpg|Jpeg|Png|Bmp)$";
+		Pattern pattern = Pattern.compile(regex); 
+		Matcher matcher = pattern.matcher(text); 
+		return matcher.matches();
+	}
+	
+	class ImageFileFilter extends javax.swing.filechooser.FileFilter
+	{
+	    public boolean accept(File file)
+	    {
+	        String filename = file.getName().toLowerCase();
+	        return filename.endsWith(".png") || filename.endsWith(".jpg") || filename.endsWith(".gif");
+	    }
+	    public String getDescription()
+	    {
+	        return "*.png, *.jpg, *.gif";
+	    }
+	}
+}

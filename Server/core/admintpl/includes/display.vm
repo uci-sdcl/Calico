@@ -1,0 +1,27 @@
+
+#macro(error $message $title)
+<div class="errorbox">
+#if($title)
+<h3>$title</h3>
+#end
+<strong>$message</strong>
+</div>
+#end
+
+#macro(success $message $title)
+<div class="successbox">
+#if($title)
+<h3>$title</h3>
+#end
+<strong>$message</strong>
+</div>
+#end
+
+#macro(notice $message $title)
+<div class="errorbox notice">
+#if($title)
+<h3>$title</h3>
+#end
+<strong>$message</strong>
+</div>
+#end

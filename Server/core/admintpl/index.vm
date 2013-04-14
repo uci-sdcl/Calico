@@ -1,0 +1,11 @@
+#parse( "includes/header.vm" )
+
+<h1>Calico Administration GUI</h1>
+
+
+#error("blah")
+#success("blah", "test")
+#notice("blah")
+
+
+#parse( "includes/footer.vm" )

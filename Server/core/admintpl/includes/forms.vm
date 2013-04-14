@@ -1,0 +1,36 @@
+#macro(form_yesno $field $value )
+<label><input type="radio" name="$field" value="true" class="radio" #if($value=="true")checked="checked" #end /> Yes</label>
+<label><input type="radio" name="$field" value="false" #if($value=="false")checked="checked" #end class="radio" /> No</label>
+#end
+
+#macro(form_submit)
+<fieldset class="submit-buttons">
+	<legend>Submit</legend>
+	<input class="button1" type="submit" id="submit" name="submit" value="Submit" />&nbsp;
+	<input class="button2" type="reset" id="reset" name="reset" value="Reset" />
+</fieldset>
+#end
+
+#macro(form_submit_small)
+<p class="submit-buttons">
+	<input class="button1" type="submit" id="submit" name="submit" value="Submit" />&nbsp;
+	<input class="button2" type="reset" id="reset" name="reset" value="Reset" />
+</p>
+#end
+
+#macro(form_select $name $options $selected)
+<select name="$name">
+<option value="en" selected="selected">British English</option>
+<option value="nl_x_formal">Nederlands (Formeel)</option>
+<option value="en_us">English (United States)</option>
+<option value="pt_br">Português (Brasil)</option>
+<option value="es">Español</option>
+</select>
+#end
+
+#macro(form_label $name $info)
+<label>$name</label>
+#if($info)
+<br/><span>$info</span>	
+#end
+#end

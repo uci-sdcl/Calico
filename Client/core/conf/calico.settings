@@ -1,0 +1,8 @@
+# Some calico settings
+#Tue Oct 26 03:27:59 PDT 2010
+resw=0
+port=27000
+password=
+resh=0
+host=192.168.2.1
+username=Table-

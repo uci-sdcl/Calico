@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/calico3client/!svn/ver/645/plugins/UserListPluginClient/icons/calico/iconsets/calico
+END
+audio.png
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/calico3client/!svn/ver/577/plugins/UserListPluginClient/icons/calico/iconsets/calico/audio.png
+END
+default-user.png
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/calico3client/!svn/ver/577/plugins/UserListPluginClient/icons/calico/iconsets/calico/default-user.png
+END
+microphone.png
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/calico3client/!svn/ver/645/plugins/UserListPluginClient/icons/calico/iconsets/calico/microphone.png
+END
+default-user-16.png
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/calico3client/!svn/ver/643/plugins/UserListPluginClient/icons/calico/iconsets/calico/default-user-16.png
+END
+microphone-minus.png
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/calico3client/!svn/ver/645/plugins/UserListPluginClient/icons/calico/iconsets/calico/microphone-minus.png
+END
+userlisticontheme.properties
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/calico3client/!svn/ver/644/plugins/UserListPluginClient/icons/calico/iconsets/calico/userlisticontheme.properties
+END

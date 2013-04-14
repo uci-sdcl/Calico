@@ -1,0 +1,107 @@
+#parse( "includes/forms.vm" )
+#parse( "includes/display.vm" )
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-gb" xml:lang="en-gb">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Language" content="en-gb" />
+<meta http-equiv="imagetoolbar" content="no" />
+
+<!--<link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" />
+<link rel="SHORTCUT ICON" href="/favicon.ico"/>-->
+
+<title>$g_title</title>
+
+
+## Load the Styles
+<style>
+#parse( "includes/css_style.vm" )
+</style>
+
+
+
+## Load the Prototype Library
+<script type="text/javascript">
+// <![CDATA[
+#include( "includes/js/prototype.js" )
+
+#include( "includes/js/calico.js" )
+// ]]>
+</script>
+
+<script type="text/javascript">
+// <![CDATA[
+#include( "includes/js/headerjs.js" )
+// ]]>
+</script>
+</head>
+
+<body class="ltr">
+
+<div id="wrap">
+	<div id="page-header">
+		<h1>Calico3Server Administration Panel</h1>
+		##<p><a href="http://forums.ucicalico.com/">Calico Forums</a></p>
+		<p id="skip"><a href="#acp">Skip to content</a></p>
+	</div>
+	
+	<div id="page-body">
+		<div id="tabs">
+			<ul>
+## This is the top header navbar buttons
+<li #if($g_section=="home")id="activetab"#end><a href="/gui/"><span>Home</span></a></li>
+<li #if($g_section=="clients")id="activetab"#end><a href="/gui/clients/"><span>Clients</span></a></li>
+<li #if($g_section=="config")id="activetab"#end><a href="/gui/config/"><span>Configuration</span></a></li>
+<li #if($g_section=="console")id="activetab"#end><a href="/gui/command/"><span>Console</span></a></li>
+<li #if($g_section=="chat")id="activetab"#end><a href="/gui/chat/"><span>Chat</span></a></li>
+			</ul>
+		</div>
+
+		<div id="acp">
+		<div class="panel">
+			<span class="corners-top"><span></span></span>
+				<div id="content">
+					 
+					<div id="toggle">
+						<a id="toggle-handle" accesskey="m" title="Hide or display the side menu" onclick="switch_menu();return false;" href="#"></a></div>
+						<div id="menu">
+						<p>You are logged in as:<br />
+						<strong>Administrator</strong><br/>
+						##[&nbsp;<a href="https://login.ucicalico.com/logout.php">Logout</a>&nbsp;]{*[&nbsp;<a href="LOGOUTADMIN">ACP&nbsp;Logout</a>&nbsp;]*}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+						<ul>
+	
+							##<li id="activemenu"><a href="#"><span>Active link</span></a></li>
+							
+#if($g_section=="home")
+    
+    <li class="header">Home</li>
+    <li><a href="/gui/"><span>Statistics</span></a></li>
+    <li><a href="/gui/backup/"><span>Backup &amp; Restore</span></a></li>
+ 
+    <li class="header">Image Manager</li>
+    <li><a href="/gui/imagemgr/upload"><span>Upload Image</span></a></li>
+    <li><a href="/gui/imagemgr/manage"><span>Manage Images</span></a></li>
+#elseif($g_section=="clients")
+    <li class="header">Clients</li>
+    <li><a href="/gui/clients/"><span>Client List</span></a></li>
+#elseif($g_section=="config")
+    <li class="header">Configuration</li>
+    <li><a href="/gui/config/"><span>Edit Config</span></a></li>
+#elseif($g_section=="console")
+    <li class="header">Console</li>
+    <li><a href="/gui/command"><span>Command Console</span></a></li>
+    <li><a href="/gui/command/help"><span>Command Help</span></a></li>
+#elseif($g_section=="chat")
+   <li class="header">Chat</li>
+   <li><a href="/gui/chat/"><span>Chat Console</span></a></li>
+   <li><a href="/gui/chat/help"><span>Chat Help</span></a></li>
+#end
+				</ul>
+	
+					</div>
+	
+					<div id="main">
+<a name="maincontent"></a>
+

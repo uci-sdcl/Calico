@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/calico3client/!svn/ver/648/plugins/UserListPluginClient/src/calico/plugins/userlist
+END
+UserImage.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/calico3client/!svn/ver/666/plugins/UserListPluginClient/src/calico/plugins/userlist/UserImage.java
+END
+UserListNetworkCommands.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/calico3client/!svn/ver/623/plugins/UserListPluginClient/src/calico/plugins/userlist/UserListNetworkCommands.java
+END
+MuteAudio.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/calico3client/!svn/ver/640/plugins/UserListPluginClient/src/calico/plugins/userlist/MuteAudio.java
+END
+UserListPlugin.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/calico3client/!svn/ver/653/plugins/UserListPluginClient/src/calico/plugins/userlist/UserListPlugin.java
+END
+UserImageCreate.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/calico3client/!svn/ver/653/plugins/UserListPluginClient/src/calico/plugins/userlist/UserImageCreate.java
+END
+UserListButton.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/calico3client/!svn/ver/637/plugins/UserListPluginClient/src/calico/plugins/userlist/UserListButton.java
+END
+UserImageDelete.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/calico3client/!svn/ver/641/plugins/UserListPluginClient/src/calico/plugins/userlist/UserImageDelete.java
+END
+AudioListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/calico3client/!svn/ver/639/plugins/UserListPluginClient/src/calico/plugins/userlist/AudioListener.java
+END
+UserList.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/calico3client/!svn/ver/666/plugins/UserListPluginClient/src/calico/plugins/userlist/UserList.java
+END

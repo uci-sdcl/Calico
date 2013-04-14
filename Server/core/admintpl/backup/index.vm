@@ -1,0 +1,60 @@
+#parse( "includes/header.vm" )
+
+
+<h1>Backup &amp; Restore</h1>
+
+<form method="get" action="/backup/generate">
+<input type="hidden" name="saveto" value="BROWSER" />
+<fieldset>
+	<legend>Download Backup</legend>
+	<dl>
+		<dt><label>Download Backup</label></dt>
+		<dd><input type="submit" class="button1" value="Download Backup" /></dd>
+	</dl>
+</fieldset>
+</form>
+
+#* 
+<h3>Save Local Backup</h3>
+<form method="get" action="/backup/generate">
+<input type="hidden" name="saveto" value="FILE" />
+<fieldset>
+	<dl>
+		<dt><label>Backup Filename</label>
+		<br/>The filename you want to save the backup as. If this file exists, it will be overwritten.
+		</dt>
+		<dd><input type="text" name="file" value="www_backup.csb" /></dd>
+	</dl>
+	<p class="quick">
+		<input class="button1" type="submit" value="Save Backup" />
+	</p>
+
+</fieldset>
+##<fieldset class="submit-buttons">
+##	<legend>Submit</legend>
+##	<input class="button1" type="submit" id="submit" name="submit" value="Submit" />&nbsp;
+##	<input class="button2" type="reset" id="reset" name="reset" value="Reset" />
+##</fieldset>
+
+</form>
+*#
+
+
+#if($get.upload==1)
+	#success("<strong>Backup has been successfully uploaded</strong>")
+#elseif($get.upload==2)
+	#error("<strong>There was a problem with your backup, please try again.</strong>")
+#end
+<form enctype="multipart/form-data" method="post" action="/gui/backup/">
+<input type="hidden" name="testvar" value="testvalue" />
+<fieldset>
+	<legend>Restore a Backup</legend>
+	<dl>
+		<dt><label>Backup File</label><br/>This should be a backup file generated using the server</dt>
+		<dd><input type="file" name="Filedata" size="30" /></dd>
+	</dl>
+		#form_submit_small()
+</fieldset>
+</form>
+
+#parse( "includes/footer.vm" )

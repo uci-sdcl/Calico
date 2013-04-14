@@ -1,0 +1,274 @@
+package calico.plugins.userlist;
+
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+
+import calico.Calico;
+import calico.components.CGroupImage;
+import calico.components.piemenu.PieMenu;
+import calico.controllers.CCanvasController;
+import calico.controllers.CGroupController;
+import calico.controllers.CImageController;
+import calico.inputhandlers.CalicoInputManager;
+import calico.inputhandlers.StickyItem;
+import calico.plugins.userlist.iconsets.CalicoIconManager;
+import calico.utils.Geometry;
+import edu.umd.cs.piccolo.util.PAffineTransform;
+import edu.umd.cs.piccolo.util.PPaintContext;
+
+public class UserImage extends CGroupImage
+	implements StickyItem
+{
+	private Image audioIcon;	
+	private String userName;
+	private String truncatedUserName;
+	private boolean drawAudioIcon = false;
+	private boolean drawPenIcon = false;
+	private int mode = 0;
+	private long group = 0l;
+	private static Color penColor = Color.black;
+	private static final int defaultSize = 64;
+	private static final int innerBuffer = 2;
+	private static final int textBuffer = 4;
+	
+	public UserImage(long uuid, long cuid, long puid, String img, int imgX,
+			int imgY, int imageWidth, int imageHeight, String userName)
+	{
+		super(uuid, cuid, puid, img, imgX, imgY, imageWidth, imageHeight);
+		setImage(img);
+		this.uuid = uuid;
+		audioIcon = CalicoIconManager.getIconImage("plugins.userlist.audio");
+		this.userName = userName;
+		truncatedUserName = getTruncatedText();
+		transparency = 1.0f;
+	}
+	
+	@Override
+	protected ObjectArrayList<Class<?>> internal_getPieMenuButtons()
+	{
+		ObjectArrayList<Class<?>> pieMenuButtons = new ObjectArrayList<Class<?>>();
+		
+		if (this.uuid == UserListPlugin.getUUID())
+		{
+			pieMenuButtons.add(calico.plugins.userlist.UserImageCreate.class);
+			pieMenuButtons.add(calico.plugins.userlist.UserImageDelete.class);
+			pieMenuButtons.add(calico.plugins.userlist.MuteAudio.class);
+		}
+		
+		return pieMenuButtons;
+	}
+	
+	
+	// fix
+	public void setImage(String imgURL)
+	{
+		if (CImageController.imageExists(uuid))
+		{// && UserImageCreate.isImageURL(imgURL))
+			super.setImage(imgURL);
+		}
+		else
+		{
+			image = CalicoIconManager.getIconImage("plugins.userlist.user");
+		}
+//		if (imgURL.equals(""))
+//		{
+//			image = CalicoIconManager.getIconImage("plugins.userlist.user");
+//		}
+//		else
+//		{
+//			try
+//			{
+//				URL url= new URL(imgURL);
+//				image = Toolkit.getDefaultToolkit().createImage(url);
+//			}
+//			catch (MalformedURLException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+	}
+	
+	protected void paint(final PPaintContext paintContext)
+	{
+//		drawBG(paintContext, Color.lightGray, 0.5F, this.getRawPolygon().getBounds());
+		super.paint(paintContext); 		// draw user image
+		this.setPaint(Color.lightGray);
+		drawAudioIcon(paintContext);	// draw audio icon
+		drawPenIcon(paintContext);		// draw pen icon
+		drawUserName(paintContext);		// draw user name
+	}
+	
+	// bottom right icon
+	private void drawAudioIcon(final PPaintContext paintContext)
+	{
+		if (drawAudioIcon)
+		{
+			setTransparency(1.0f);
+			final Graphics2D g2 = paintContext.getGraphics();
+			PAffineTransform piccoloTransform = getPTransform();
+			paintContext.pushTransform(piccoloTransform);
+			
+			// draw audio icon background
+			Rectangle bounds = this.getRawPolygon().getBounds();
+			int audioW = 16;//audioIcon.getWidth(null);
+			int audioH = 16;//audioIcon.getHeight(null);
+			int audioX = bounds.x + bounds.width - audioW - innerBuffer;
+			int audioY = bounds.y + bounds.height - audioH - innerBuffer;
+			drawBG(paintContext, Color.white, 0.5F, audioX-2, audioY-2, audioW+2, audioH+2);
+			
+			// draw audio icon
+//			g2.setColor(Color.white);
+			g2.drawImage(audioIcon, audioX-1, audioY-1, audioW, audioH, null);
+			
+			paintContext.popTransform(piccoloTransform);
+		}
+	}
+	
+	// bottom left icon
+	private void drawPenIcon(final PPaintContext paintContext)
+	{
+		
+		// draw pen icon
+		if (drawPenIcon)
+		{
+
+		setTransparency(1.0f);
+		final Graphics2D g2 = paintContext.getGraphics();
+		PAffineTransform piccoloTransform = getPTransform();
+		paintContext.pushTransform(piccoloTransform);
+			
+		// draw pen icon background
+		Rectangle bounds = this.getRawPolygon().getBounds();
+		int strokeW = 16;//audioIcon.getWidth(null);
+		int strokeH = 16;//audioIcon.getHeight(null);
+		int strokeX = bounds.x + innerBuffer + innerBuffer;
+		int strokeY = bounds.y + bounds.height - strokeH - innerBuffer;
+		if (mode != Calico.MODE_DELETE)
+			drawBG(paintContext, penColor, 1.0F, strokeX-2, strokeY-2, strokeW+2, strokeH+2);
+			
+//		// draw pen icon
+//		if (drawPenIcon)
+//		{
+//			g2.setColor(Color.white);
+		String iconImage;
+		
+		if (mode == Calico.MODE_ARROW) iconImage = "mode.arrow";
+		else if (mode == Calico.MODE_DELETE) iconImage = "mode.delete";
+		else if (mode == Calico.MODE_EXPERT) 
+			if (PieMenu.isPieMenuActive() || PieMenu.isPieMenuActive() 
+					|| CGroupController.get_smallest_containing_group_for_point(CCanvasController.getCurrentUUID(), CalicoInputManager.mostRecentPoint) != 0l)
+				iconImage = "group.perm";
+			else iconImage = "mode.stroke";
+		else if (mode == Calico.MODE_POINTER) iconImage = "mode.pointer";
+		else if (mode == Calico.MODE_SCRAP) iconImage = "mode.scrap";
+		else if (mode == Calico.MODE_STROKE) iconImage = "mode.stroke";
+		else iconImage = "mode.stroke";
+			
+		
+			g2.drawImage(
+					calico.iconsets.CalicoIconManager.getIconImage(iconImage),
+					strokeX-1, strokeY-1, strokeW, strokeH, null);
+//		}
+		
+		paintContext.popTransform(piccoloTransform);
+		}
+	}
+	
+	private void drawUserName(final PPaintContext paintContext)
+	{
+		final Graphics2D g2 = paintContext.getGraphics();
+		PAffineTransform piccoloTextTransform = getPTransform();
+		paintContext.pushTransform(piccoloTextTransform);
+		paintContext.pushTransparency(1.0F);
+		
+		// draw text background
+		Rectangle bounds = this.getRawPolygon().getBounds();
+//		int maxTextW = bounds.width - innerBuffer - innerBuffer;
+		int textX = bounds.x + innerBuffer;
+		int textY = bounds.y + innerBuffer;
+		int textW = Geometry.getTextBounds(truncatedUserName).width + (textBuffer * 2);
+		int textH = Geometry.getTextBounds(truncatedUserName).height;
+		drawBG(paintContext, Color.white, 0.5F, textX, textY, textW, textH);
+		
+		// draw text
+		g2.setColor(Color.black);
+		g2.drawString(truncatedUserName, textX + textBuffer, textY + textH - textBuffer);
+		
+		paintContext.popTransform(piccoloTextTransform);
+		paintContext.popTransparency(1.0F);
+	}
+	
+	private void drawBG(PPaintContext paintContext, Color color, float opacity,
+			int rectX, int rectY, int rectW, int rectH)
+	{
+		final Graphics2D g2 = paintContext.getGraphics();
+		paintContext.pushTransparency(opacity);
+		g2.setColor(color);
+		g2.fillRect(rectX, rectY, rectW, rectH);
+		paintContext.popTransparency(opacity);
+	}
+	
+	private String getTruncatedText()
+	{
+		Rectangle bounds = this.getRawPolygon().getBounds();
+		int width = bounds.width - (textBuffer * 2) - (innerBuffer * 2);
+		
+		if (userName == null || userName.length() == 0 ||
+				Geometry.getTextBounds(userName).width <= width)
+		{
+			return userName;
+		}
+		
+		String truncated = userName + "...";
+
+		while(Geometry.getTextBounds(truncated).width > width)
+			truncated = truncated.substring(0, truncated.length()-4) + "...";
+			
+		return truncated;
+	}
+	
+	public void showAudioIcon()
+	{
+		drawAudioIcon = true;
+		repaint();
+	}
+	
+	public void hideAudioIcon()
+	{
+		drawAudioIcon = false;
+		repaint();
+	}
+	
+	public void showPenIcon(int mode, long group, Color color)
+	{
+		drawPenIcon = true;
+		this.mode = mode;
+		this.group = group;
+		penColor = color;
+		repaint();
+	}
+	
+	public void hidePenIcon()
+	{
+		drawPenIcon = false;
+		mode = 0;
+		group = 0l;
+		repaint();
+	}
+	
+	@Override
+	public int get_signature()
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean containsPoint(Point p) {
+		return getBoundsReference().contains(p);
+	}
+}

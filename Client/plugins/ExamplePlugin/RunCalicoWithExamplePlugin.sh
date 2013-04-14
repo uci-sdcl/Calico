@@ -1,0 +1,1 @@
+sh DeployExamplePlugin.sh && cd "../../trunk/calico3client-bugfixes" && ant clean && ant run

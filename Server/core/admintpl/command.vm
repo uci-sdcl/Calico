@@ -1,0 +1,30 @@
+#parse( "includes/header.vm" )
+
+<h1>Submit Command</h1>
+
+<form action="/gui/command" method="post">
+	<fieldset>
+		<legend>Send Command</legend>
+		<dl>
+			<dt><label>Command:</label><br/><span>View the <a href="/gui/command/help">help page</a> for more information</span></dt>
+			<dd><input type="text" name="command" id="commandbox" value="$lastcommand" size="60" autocomplete="off" /></dd>
+		</dl>
+		#form_submit_small()
+	</fieldset>
+</form>
+
+
+#if($hasoutput==1)
+<fieldset>
+	<legend>Command Output</legend>
+	<pre class="source">$commandoutput</pre>
+</fieldset>
+#end
+
+<script>
+window.onload=function(){
+$('commandbox').focus();
+}
+</script>
+
+#parse( "includes/footer.vm" )

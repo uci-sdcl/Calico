@@ -1,0 +1,158 @@
+<project name="IntentionalInterfacesPlugin" default="run" basedir=".">
+	<description>Calico3 Client Application</description>
+
+	<property name="src" location="src" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	<property name="webstart" location="webstart" />
+	<property name="docs" location="docs" />
+	<property name="libs" location="lib" />
+	<property name="icons" location="icons" />
+	<property name="jarname" value="iip-pluginclient" />
+	<property name="clientjar" location="calico3client" />
+	<tstamp />
+
+
+	<property name="default.heapsize" value="600M" />
+	
+	
+	<property name="pfr.release" value="trunk" />
+	<property name="distdir" location="${dist}/${jarname}-${pfr.release}" />
+	
+
+	<target name="init">
+		<mkdir dir="${build}" />
+
+		<available property="distalreadybuilt" file="${distdir}/${jarname}.jar" type="file" />
+	</target>
+	
+	<target name="rebuild-dist">
+		<antcall target="clean-dist" />
+		<antcall target="dist" />
+	</target>
+
+	<!-- CALICO -->
+	<target name="compile-calico" depends="init, build-icons">
+		<javac srcdir="${src}" destdir="${build}" includes="calico/**/*.java" debug="on" debuglevel="lines,vars,source" deprecation="on" compiler="javac1.6" source="1.6" target="1.6">
+			<classpath>
+				<fileset dir="${libs}"><include name="*.jar"/></fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	
+		
+	<!-- Build the JSON libraries-->
+	<!--
+	<target name="compile-json" depends="init">
+		<javac srcdir="${src}" debuglevel="lines,vars,source" destdir="${build}" includes="org/json/**/*.java" />
+	</target>
+	
+	<target name="json-dar" depends="compile-json">
+		<jar destfile="json.jar" basedir="${build}" compress="true"  includes="org/json/**/*.*">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}"/>
+			</manifest>
+		</jar>		
+	</target>
+	-->
+	
+
+	<!-- cleanup -->
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${docs}" />
+	</target>
+	<target name="clean-calico">
+		<delete dir="${build}/calico" />
+	</target>
+	<target name="clean-icons">
+		<delete file="${build}/calico_icons.jar" />
+	</target>
+	
+	<target name="clean-dist">
+		<delete dir="${dist}" />
+	</target>
+	
+	
+	<target name="dist" depends="compile-calico,build-icons" unless="${distalreadybuilt}">
+		<mkdir dir="${dist}" />
+
+		<mkdir dir="${distdir}" />
+
+		
+		<!--<mkdir dir="${distdir}/libs" />-->
+		<!--<mkdir dir="${distdir}/logs" />-->
+		<!-- Copy libs and stuff -->
+		<copy todir="${distdir}/libs"><fileset dir="${libs}" includes="*.jar"/></copy>
+		<copy todir="${distdir}/icons"><fileset dir="${icons}" includes="**/*.properties"/></copy>
+		<copy todir="${distdir}/icons"><fileset dir="${icons}" includes="**/*.png"/></copy>
+		
+		<copy todir="${build}"><fileset dir="${icons}" includes="**/*.properties"/></copy>
+		<copy todir="${build}"><fileset dir="${icons}" includes="**/*.png"/></copy>
+	
+		
+		<!-- Make the class path-->
+		<manifestclasspath property="temp.cp" jarfile="${distdir}/${jarname}.jar">
+			<classpath>
+				<fileset dir="${distdir}/libs"><include name="*.jar"/></fileset>
+				<fileset dir="${distdir}/icons" includes="**/*.properties"/>
+				<fileset dir="${distdir}/icons" includes="**/*.png"/>
+			</classpath>
+		</manifestclasspath>
+		
+		<tstamp>
+			<format property="buildtime" pattern="MM/dd/yyyy hh:mm aa Z" />
+		</tstamp>
+		
+		<!-- make the jar file -->
+		<jar destfile="${distdir}/${jarname}.jar" basedir="${build}" compress="false">
+			<manifest>
+				<attribute name="Created-By" value="${user.name}"/>
+				<!--<attribute name="Main-Class" value="calico.Calico"/>-->
+				<attribute name="Class-Path" value="${temp.cp}" />
+				
+				<attribute name="Implementation-Vendor" value="University of California, Irvine"/>
+				<attribute name="Implementation-Title" value="Calico3 Client"/>
+				<attribute name="Implementation-Version" value="${jarname} - ${pfr.release} (${buildtime})"/>
+			</manifest>
+		</jar>
+	</target>
+	
+		<!-- Run the JAR file -->
+	<target name="run" depends="dist" description="Runs the jar file">
+		<mkdir dir="$[distdir}/plugins" />
+		<copy todir="${distdir}"><fileset dir="${distdir}/libs" includes="calico3client.jar" /></copy>
+		<copy todir="${distdir}/plugins"><fileset dir="${distdir}" includes="${jarname}.jar" /></copy>
+		
+		<java jar="${distdir}/calico3client.jar" dir="${distdir}" fork="true" maxmemory="${default.heapsize}">
+			<jvmarg value="-Xmx${default.heapsize}" />
+			<jvmarg value="-Xms${default.heapsize}" />
+		</java>
+	</target>
+	
+	
+	<target name="run-debug" depends="dist" description="Runs the jar file">
+		
+		<copy todir="${distdir}"><fileset dir="${distdir}/libs" includes="calico3client.jar" /></copy>
+		<copy todir="${distdir}/plugins"><fileset dir="${distdir}" includes="${jarname}.jar" /></copy>
+		
+		<java jar="${distdir}/calico3client.jar" dir="${distdir}" fork="true" maxmemory="${default.heapsize}">
+			<jvmarg value="-Xmx${default.heapsize}" />
+			<jvmarg value="-Xms${default.heapsize}" />
+			<jvmarg value="-Xdebug"/>
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=10434,server=y,suspend=n"/>
+			<jvmarg value="-classpath"/>
+			<jvmarg value="${distdir}/libs" />
+		</java>
+	</target>
+	
+	<target name="build-icons" depends="init">
+		<!--<jar destfile="${build}/silk_icons.jar" basedir="icons" includes="calico/iconsets/silk/**/*.*" />
+		<jar destfile="${build}/fugue_icons.jar" basedir="icons" includes="calico/iconsets/fugue/**/*.*" />-->
+		<jar destfile="${libs}/calico_plugin_icons.jar" basedir="icons" includes="calico/iconsets/calico/**/*.*" />
+	</target>
+	
+
+</project>

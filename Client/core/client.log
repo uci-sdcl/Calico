@@ -1,0 +1,238 @@
+Buildfile: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\build.xml
+
+init:
+    [mkdir] Created dir: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin
+
+build-icons:
+
+compile-calico:
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\build.xml:37: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 203 source files to C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\CGroupImage.java:23: warning: sun.java2d.pipe.AlphaColorPipe is Sun proprietary API and may be removed in a future release
+    [javac] import sun.java2d.pipe.AlphaColorPipe;
+    [javac]                       ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\controllers\CImageController.java:28: warning: sun.awt.image.ImageFetchable is Sun proprietary API and may be removed in a future release
+    [javac] import sun.awt.image.ImageFetchable;
+    [javac]                     ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\controllers\CStrokeController.java:27: warning: sun.reflect.ReflectionFactory is Sun proprietary API and may be removed in a future release
+    [javac] import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
+    [javac]                   ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\controllers\CStrokeController.java:27: warning: sun.reflect.ReflectionFactory is Sun proprietary API and may be removed in a future release
+    [javac] import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
+    [javac]                   ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\CArrowInputHandler.java:9: warning: [deprecation] calico.components.piemenu.arrows.ArrowDeleteButton in calico.components.piemenu.arrows has been deprecated
+    [javac] import calico.components.piemenu.arrows.ArrowDeleteButton;
+    [javac]                                        ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\CArrowInputHandler.java:10: warning: [deprecation] calico.components.piemenu.arrows.ChangeArrowColorButton in calico.components.piemenu.arrows has been deprecated
+    [javac] import calico.components.piemenu.arrows.ChangeArrowColorButton;
+    [javac]                                        ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\canvas\CCanvasExpertModeInputHandler.java:8: warning: [deprecation] calico.components.piemenu.canvas.DeleteAreaButton in calico.components.piemenu.canvas has been deprecated
+    [javac] import calico.components.piemenu.canvas.DeleteAreaButton;
+    [javac]                                        ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\canvas\CCanvasStrokeModeInputHandler.java:8: warning: [deprecation] calico.components.piemenu.canvas.DeleteAreaButton in calico.components.piemenu.canvas has been deprecated
+    [javac] import calico.components.piemenu.canvas.DeleteAreaButton;
+    [javac]                                        ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\groups\CGroupExpertModeInputHandler.java:10: warning: [deprecation] calico.components.piemenu.canvas.DeleteAreaButton in calico.components.piemenu.canvas has been deprecated
+    [javac] import calico.components.piemenu.canvas.DeleteAreaButton;
+    [javac]                                        ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\groups\CGroupExpertModeInputHandler.java:11: warning: [deprecation] calico.components.piemenu.canvas.TextCreate in calico.components.piemenu.canvas has been deprecated
+    [javac] import calico.components.piemenu.canvas.TextCreate;
+    [javac]                                        ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\groups\CGroupExpertModeInputHandler.java:32: warning: sun.misc.PerformanceLogger is Sun proprietary API and may be removed in a future release
+    [javac] import sun.misc.PerformanceLogger;
+    [javac]                ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\groups\CGroupStrokeModeInputHandler.java:8: warning: [deprecation] calico.components.piemenu.canvas.TextCreate in calico.components.piemenu.canvas has been deprecated
+    [javac] import calico.components.piemenu.canvas.TextCreate;
+    [javac]                                        ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\bubblemenu\BubbleMenu.java:573: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 					getButton(i).onClick(ev);
+    [javac] 					            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\decorators\CListDecorator.java:772: warning: [deprecation] calico.components.piemenu.canvas.ArrowButton in calico.components.piemenu.canvas has been deprecated
+    [javac] 		pieMenuButtons.add(calico.components.piemenu.canvas.ArrowButton.class);
+    [javac] 		                                                   ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\decorators\CListDecorator.java:786: warning: [deprecation] calico.components.piemenu.canvas.ArrowButton in calico.components.piemenu.canvas has been deprecated
+    [javac] 		pieMenuButtons.add(calico.components.piemenu.canvas.ArrowButton.class);
+    [javac] 		                                                   ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\InfoButton.java:14: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\PieMenu.java:274: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 				getButton(i).onClick(ev);
+    [javac] 				            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\SetArrowColorButton.java:25: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\grid\CopyCanvasButton.java:17: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\grid\CutCanvasButton.java:17: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\grid\DeleteCanvasButton.java:19: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\grid\LockCanvasButton.java:21: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\grid\UnlockCanvasButton.java:21: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupCirclifyButton.java:21: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupConvexHullButton.java:23: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupCopyButton.java:20: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupCreateTempButton.java:26: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupCreateTempButton.java:28: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 		super.onClick(ev);
+    [javac] 		     ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupDrawButton.java:22: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupDuplicateButton.java:23: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupIncreaseSizeButton.java:32: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupPasteButton.java:25: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupRectifyButton.java:19: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\groups\GroupSetChildrenColorButton.java:26: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\components\piemenu\lists\ListCopyButton.java:20: warning: [deprecation] onClick(calico.inputhandlers.InputEventInfo) in calico.components.piemenu.PieMenuButton has been deprecated
+    [javac] 	public void onClick(InputEventInfo ev)
+    [javac] 	            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\inputhandlers\CalicoInputManager.java:142: warning: [deprecation] calico.inputhandlers.CArrowInputHandler in calico.inputhandlers has been deprecated
+    [javac] 		inputHandlers.put(uuid, new CArrowInputHandler(uuid));
+    [javac] 		                            ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\networking\PacketHandler.java:1305: warning: [deprecation] no_notify_hide_stroke(long,boolean) in calico.controllers.CStrokeController has been deprecated
+    [javac] 		CStrokeController.no_notify_hide_stroke(uuid, delete);
+    [javac] 		                 ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\networking\PacketHandler.java:1312: warning: [deprecation] no_notify_unhide_stroke(long) in calico.controllers.CStrokeController has been deprecated
+    [javac] 		CStrokeController.no_notify_unhide_stroke(uuid);
+    [javac] 		                 ^
+    [javac] C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\src\calico\perspectives\CanvasPerspective.java:78: warning: [deprecation] containsMousePoint(java.awt.Point) in calico.components.arrow.AbstractArrow has been deprecated
+    [javac] 				if (CArrowController.arrows.get(arrowlist[i]).containsMousePoint(new Point(x, y)))
+    [javac] 				                                             ^
+    [javac] 39 warnings
+    [javac] Creating empty C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin\calico\package-info.class
+    [javac] Creating empty C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin\calico\components\package-info.class
+    [javac] Creating empty C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin\calico\modules\package-info.class
+    [javac] Creating empty C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin\calico\networking\package-info.class
+    [javac] Creating empty C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin\calico\components\grid\package-info.class
+
+dist:
+    [mkdir] Created dir: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist
+    [mkdir] Created dir: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk
+    [mkdir] Created dir: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\libs
+    [mkdir] Created dir: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\logs
+    [mkdir] Created dir: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\conf
+    [mkdir] Created dir: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\plugins
+     [copy] Copying 25 files to C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\libs
+     [copy] Copying 2 files to C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\plugins
+     [copy] Copying 3 files to C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\conf
+     [copy] Copying 3 files to C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\bin\calico
+     [echo] Version number: 092820121036
+      [jar] Building jar: C:\Users\nmangano\git\CalicoClient-nick\trunk\calico3client-bugfixes\dist\calico3client-trunk\calico3client.jar
+
+run:
+     [java] [INFO] Loading config file: conf/calico.properties
+     [java] Loading connection box
+     [java] Username: SDCL-
+     [java] [INFO] Loading Icon Theme: Calico Icons by Mitch Dempsey (none)
+     [java] [DEBUG] SET W+H (2560,1600)
+     [java] [DEBUG] SOCKET RBUF: 10240
+     [java] [DEBUG] SOCKET SBUF: 8192
+     [java] [DEBUG] SOCKET LINGER: -1
+     [java] [DEBUG] SOCKET TIMEOUT: 0
+     [java] [DEBUG] SOCKET KEEPALIVE: false
+     [java] [DEBUG] Loading plugins
+     [java] [LS] ListenServer thread is starting. (T:21789)
+     [java] [DEBUG] Starting send packets thread
+     [java] TICKET
+     [java] Loading calico.plugins.palette.PalettePlugin
+     [java] [INFO] Loading Icon Theme: Calico Icons by Nicolas Mangano (none)
+     [java] [DEBUG] Registering plugin Palette
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] found a palette one!
+     [java] Registering to pie menu: calico.plugins.palette.SaveToPaletteButton
+     [java] Loading calico.plugins.userlist.UserListPlugin
+     [java] [INFO] Loading Icon Theme: Calico Icons by Mitch Dempsey (none)
+     [java] [DEBUG] Registering plugin UserList
+     [java] [DEBUG] USER LIST START
+     [java] [ERROR] Plugin calico.plugins.palette.PalettePlugin has already been registered
+     [java] [ERROR] Plugin calico.plugins.userlist.UserListPlugin has already been registered
+     [java] [DEBUG] FIRST PLUGIN: 
+     [java] [DEBUG] loaded generic menu bar for GridBottomMenuBar
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] loaded generic menu bar for GridBottomMenuBar
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+     [java] [DEBUG] setting canvas sizes 
+
+BUILD SUCCESSFUL
+Total time: 1 minute 19 seconds

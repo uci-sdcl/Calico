@@ -1,0 +1,38 @@
+#parse( "includes/header.vm" )
+
+<h1>Clients</h1>
+
+
+<table>
+<tr>
+	<th>ID</th>
+	<th>Host:Port</th>
+	<th>Username</th>
+	<th>Options</th>
+</tr>
+
+#foreach($client in $clients)
+#set( $clienthostname = $client.getHostname() )
+<tr>
+	<td>$client.getClientID()</td>
+	<td>$client.getHost():$client.getPort()
+	#if( $clienthostname!="")
+		&nbsp;(<i>$client.getHostname()</i>)
+	#end
+	</td>
+	<td>$client.getUsername()</td>
+	<td>
+		<a href="#" onclick="alert('Not yet implemented');return false;">Kick</a>
+	</td>
+</tr>
+#end
+#if($clients.size() == 0)
+<tr class="row0">
+	<td colspan="4">There are no clients currently connected to the server.</td>
+</tr>
+#end
+	
+</table>
+
+
+#parse( "includes/footer.vm" )

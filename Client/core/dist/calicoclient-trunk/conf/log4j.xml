@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    
+    <appender class="org.apache.log4j.ConsoleAppender" name="console">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param value="[%p] %m%n" name="ConversionPattern"/>
+        </layout>
+    </appender>
+    
+    <appender class="org.apache.log4j.ConsoleAppender" name="consoletimer">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param value="[%p] &lt;%r&gt; %m%n" name="ConversionPattern"/>
+        </layout>
+    </appender>
+    
+    <appender class="org.apache.log4j.ConsoleAppender" name="ListServer">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param value="[LS] %m (T:%r)%n" name="conversionPattern"/>
+        </layout>
+    </appender>
+    
+    <appender class="org.apache.log4j.ConsoleAppender" name="X">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param value="[%p] DEEEBUG %d{yyyy-MM-dd HH:mm:ss.SSS} %m%n" name="conversionPattern"/>
+        </layout>
+    </appender>
+    
+    <logger additivity="false" name="calico.networking.ListenServer">
+        <appender-ref ref="ListServer"/>
+    </logger>
+    
+    <root>
+        <priority value="debug"/>  
+        <appender-ref ref="console"/>
+    </root>
+</log4j:configuration>

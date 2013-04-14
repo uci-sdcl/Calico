@@ -1,0 +1,316 @@
+package calico.plugins.userlist;
+
+import java.awt.Color;
+
+import calico.CalicoDataStore;
+import calico.CalicoDraw;
+import calico.CalicoOptions;
+import calico.CalicoOptions.menu.menubar;
+import calico.controllers.CCanvasController;
+import calico.controllers.CGroupController;
+import calico.events.CalicoEventHandler;
+import calico.events.CalicoEventListener;
+import calico.input.CInputMode;
+import calico.inputhandlers.CalicoInputManager;
+import calico.inputhandlers.StickyItem;
+import calico.networking.Networking;
+import calico.networking.netstuff.CalicoPacket;
+import calico.networking.netstuff.NetworkCommand;
+import it.unimi.dsi.fastutil.longs.Long2ReferenceAVLTreeMap;
+import it.unimi.dsi.fastutil.longs.LongSortedSet;
+
+public class UserList implements CalicoEventListener
+{	
+	public static Long2ReferenceAVLTreeMap<UserImage> userdb =
+			new Long2ReferenceAVLTreeMap<UserImage>();
+	
+	private static long cuid;// = CCanvasController.getCurrentUUID();
+	private static long puid = 0L;
+	private static boolean visible = false;
+	private static int height;
+	private static final int defaultSize = 64;
+	private static final int offset = 10 + (CalicoOptions.menu.menubar.defaultIconDimension+CalicoOptions.menu.menubar.iconBuffer*2); // screen offset
+	private static final int buffer = 5;
+
+	public UserList()
+	{		
+		for (Integer event : UserListPlugin.getNetworkCommands(UserListNetworkCommands.class))
+			CalicoEventHandler.getInstance().addListener(event.intValue(), this, CalicoEventHandler.PASSIVE_LISTENER);
+
+		CalicoEventHandler.getInstance().addListener(
+				NetworkCommand.PRESENCE_CANVAS_USERS, this, CalicoEventHandler.PASSIVE_LISTENER);
+		CalicoEventHandler.getInstance().addListener(
+				NetworkCommand.ACTION_PRESSED, this, CalicoEventHandler.PASSIVE_LISTENER);
+		CalicoEventHandler.getInstance().addListener(
+				NetworkCommand.ACTION_RELEASED, this, CalicoEventHandler.PASSIVE_LISTENER);
+//		CalicoEventHandler.getInstance().addListener(
+//				UserListNetworkCommands.AUDIO_START, this, CalicoEventHandler.PASSIVE_LISTENER);//ACTION_PERFORMER_LISTENER);
+//		CalicoEventHandler.getInstance().addListener(
+//				UserListNetworkCommands.AUDIO_END, this, CalicoEventHandler.PASSIVE_LISTENER);//ACTION_PERFORMER_LISTENER);
+//		CalicoEventHandler.getInstance().addListener(
+//				UserListNetworkCommands.PEN_START, this, CalicoEventHandler.PASSIVE_LISTENER);
+//		CalicoEventHandler.getInstance().addListener(
+//				UserListNetworkCommands.PEN_END, this, CalicoEventHandler.PASSIVE_LISTENER);
+		
+	}
+	
+	private void addAllUsers()
+	{
+		cuid = CCanvasController.getCurrentUUID();
+		visible = true;
+		height = offset + buffer;
+//		long[] canvases = CCanvasController.canvasdb.keySet().toLongArray();
+//		for (long canvas : canvases)
+//		{
+			int[] users = CCanvasController.canvasdb.get(cuid).getClients();
+//			System.out.println("There are " + uuids.length + " clients on this canvas.");
+			for(int uuid : users)
+			{	
+				String username = CalicoDataStore.clientInfo.get(uuid);
+				
+				if (username.equals(CalicoDataStore.Username))
+					addLocalUser(uuid);
+				else
+					addUser(uuid, username);
+				
+				System.out.println("Adding user (uuid: " + uuid + ")");
+			}
+//			System.out.println("There are " + userdb.size() + " clients in the userdb.");
+//		}
+	}
+	
+	private void addLocalUser(long uuid)
+	{
+		UserListPlugin.setUUID(uuid);
+		addUser(uuid, CalicoDataStore.Username);
+		UserListPlugin.startCapture();
+	}
+	
+	private void addUser(long uuid, String userName)
+	{
+		String img = "";
+		int imgWidth = defaultSize;
+		int imgHeight = defaultSize;
+		int imgX = CalicoDataStore.ScreenWidth - imgWidth - buffer - offset;
+		int imgY = height;
+		height += imgHeight + buffer;
+
+		UserImage userImage = new UserImage(uuid, cuid, puid, img, 0, "", imgX, imgY,
+				imgWidth, imgHeight, userName);
+		
+		no_notify_create_user_image(uuid, cuid, puid, userImage);
+		
+		userdb.put(uuid, userImage);
+	}
+	
+	private void removeAllUsers()
+	{
+		visible = false;
+//		LongSortedSet uuids = userdb.keySet();
+		for (Long uuid : userdb.keySet())
+		{
+			removeUser(uuid);
+		}
+		//redraw();
+		//CCanvasController.canvasdb.get(cuid).repaint();
+	}
+	
+	private void removeUser(long uuid)
+	{
+		userdb.remove(uuid);
+		no_notify_delete_user_image(uuid, cuid, puid);
+	}
+	
+	private void refresh()
+	{
+		removeAllUsers();
+		addAllUsers();
+	}
+	
+	// CGroupController.java
+	public static void no_notify_create_user_image(long uuid, long cuid,
+			long puid, UserImage userImage)
+	{
+		CGroupController.groupdb.put(uuid, userImage);
+//		CCanvasController.canvasdb.get(cuid).addChildGroup(uuid);
+//		CCanvasController.canvasdb.get(cuid).getCamera().addChild(
+//				CGroupController.groupdb.get(uuid));
+		CalicoDraw.addChildToNode(CCanvasController.canvasdb.get(cuid).getCamera(), CGroupController.groupdb.get(uuid));
+		CGroupController.groupdb.get(uuid).drawPermTemp(true);
+		CGroupController.no_notify_finish(uuid, false);
+		
+		CalicoInputManager.registerStickyItem((StickyItem)CGroupController.groupdb.get(uuid));
+	}
+	
+	public static void no_notify_delete_user_image(long uuid, long cuid,
+			long puid)
+	{
+//		CGroupController.no_notify_delete(uuid);
+		CGroupController.groupdb.get(uuid).drawPermTemp(true);
+//		CCanvasController.canvasdb.get(cuid).getCamera().removeChild(
+//				CGroupController.groupdb.get(uuid));
+		CalicoDraw.removeChildFromNode(CCanvasController.canvasdb.get(cuid).getCamera(), CGroupController.groupdb.get(uuid));
+//		CCanvasController.canvasdb.get(cuid).deleteChildGroup(uuid);
+		CGroupController.no_notify_finish(uuid, false);
+		CGroupController.groupdb.remove(uuid);
+		
+		CalicoInputManager.unregisterStickyItem((StickyItem)CGroupController.groupdb.get(uuid));
+	}
+	
+	public boolean visible() {
+		return visible;
+	}
+	
+	public void show()
+	{
+		addAllUsers();
+	}
+	
+	public void hide()
+	{
+		removeAllUsers();
+	}
+	
+	public void showAudioIcon(long uuid)
+	{
+		try
+		{
+			if (visible)
+			{
+				if (userdb.get(uuid) != null)
+					userdb.get(uuid).showAudioIcon();
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("ERROR: No such user (uuid: " + uuid + ")");
+			e.printStackTrace();
+		}
+	}
+	
+	public void hideAudioIcon(long uuid)
+	{
+		try
+		{
+			if (visible)
+			{
+				if (userdb.get(uuid) != null)
+					userdb.get(uuid).hideAudioIcon();
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("ERROR: No such user (uuid: " + uuid + ")");
+			e.printStackTrace();
+		}
+	}
+	
+	public void showPenIcon(long uuid, CInputMode mode, long group, Color color)
+	{
+		try
+		{
+			if (visible)
+			{
+				if (userdb.get(uuid) != null)
+					userdb.get(uuid).showPenIcon(mode, group, color);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("ERROR: No such user (uuid: " + uuid + ")");
+			e.printStackTrace();
+		}
+	}
+	
+	public void hidePenIcon(long uuid)
+	{
+		try
+		{
+			if (visible)
+			{
+				if (userdb.get(uuid) != null)
+					userdb.get(uuid).hidePenIcon();
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("ERROR: No such user (uuid: " + uuid + ")");
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void handleCalicoEvent(int event, CalicoPacket p)
+	{	
+		switch (event)
+		{
+			case UserListNetworkCommands.AUDIO_START:
+				p.rewind();
+				p.getInt(); // event
+				long uuid_audio_start = p.getLong();
+				showAudioIcon(uuid_audio_start);
+//				System.out.println("Audio start (uuid: " + uuid_audio_start + ")");
+				break;
+			case UserListNetworkCommands.AUDIO_END:
+				p.rewind();
+				p.getInt(); // event
+				long uuid_audio_end = p.getLong();
+				hideAudioIcon(uuid_audio_end);
+//				System.out.println("Audio end   (uuid: " + uuid_audio_end + ")");
+				break;
+			case NetworkCommand.PRESENCE_CANVAS_USERS:
+				// fix case where going back to original canvas after hiding userlist and moving around canvases would show userlist agian
+				p.rewind();
+				p.getInt(); // event
+				long canvasid = p.getLong();
+				int count = p.getInt();
+//				System.out.println("  canvas:  " + cuid);
+//				System.out.println("  clients: " + count);
+				if (CCanvasController.getCurrentUUID() == canvasid && visible)
+				{
+					refresh();
+				}
+				break;
+			case NetworkCommand.ACTION_PRESSED: //example
+				p.rewind();
+				p.getInt();
+				int x = p.getInt();
+				int y = p.getInt();
+				long g = p.getLong();
+				long t = p.getLong();
+				CalicoPacket packet_pressed = CalicoPacket.getPacket(UserListNetworkCommands.PEN_START, UserListPlugin.getUUID(), CalicoDataStore.PenColor, CalicoDataStore.Mode.ordinal(), g);
+				CalicoEventHandler.getInstance().fireEvent(UserListNetworkCommands.PEN_START, packet_pressed);
+				Networking.send(packet_pressed);
+				break;
+			case NetworkCommand.ACTION_RELEASED: //example
+				p.rewind();
+//				int x2 = p.getInt();
+//				int y = p.getInt();
+//				long g = p.getLong();
+//				long t = p.getLong();
+				CalicoPacket packet_released = CalicoPacket.getPacket(UserListNetworkCommands.PEN_END, UserListPlugin.getUUID());
+				CalicoEventHandler.getInstance().fireEvent(UserListNetworkCommands.PEN_END, packet_released);
+				Networking.send(packet_released);
+				break;
+			case UserListNetworkCommands.PEN_START:
+				p.rewind();
+				p.getInt(); // event
+				long uuid_pen_start = p.getLong();
+				Color color = p.getColor();
+				CInputMode mode = CInputMode.values()[p.getInt()];
+				long group = p.getLong();
+				showPenIcon(uuid_pen_start, mode, group, color);
+//				System.out.println("Pen start   (uuid: " + uuid_pen_start + ")");
+				break;
+			case UserListNetworkCommands.PEN_END:
+				p.rewind();
+				p.getInt(); // event
+				long uuid_pen_end = p.getLong();
+				hidePenIcon(uuid_pen_end);
+//				System.out.println("Pen end     (uuid: " + uuid_pen_end + ")");
+				break;
+			default:
+				break;
+		}
+	}
+}

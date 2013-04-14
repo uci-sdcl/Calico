@@ -1,0 +1,36 @@
+#parse( "includes/header.vm" )
+
+
+<h1>Image Upload</h1>
+
+#*
+<form method="get" action="/backup/generate">
+<input type="hidden" name="saveto" value="BROWSER" />
+<fieldset>
+	<legend>Download Backup</legend>
+	<dl>
+		<dt><label>Download Backup</label></dt>
+		<dd><input type="submit" class="button1" value="Download Backup" /></dd>
+	</dl>
+</fieldset>
+</form>
+*#
+
+#if($get.upload==1)
+	#success("<strong>Image has been successfully uploaded</strong>")
+#elseif($get.upload==2)
+	#error("<strong>There was a problem with your image, please try again.</strong>")
+#end
+<form enctype="multipart/form-data" method="post" action="/gui/imagemgr/upload">
+<input type="hidden" name="testvar" value="testvalue" />
+<fieldset>
+	<legend>Upload an Image</legend>
+	<dl>
+		<dt><label>Image File</label><br/>This should be an image file</dt>
+		<dd><input type="file" name="Filedata" size="30" /></dd>
+	</dl>
+		#form_submit_small()
+</fieldset>
+</form>
+
+#parse( "includes/footer.vm" )
