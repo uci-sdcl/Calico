@@ -44,8 +44,6 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import com.itextpdf.text.pdf.hyphenation.TernaryTree.Iterator;
-
 import calico.Calico;
 import calico.CalicoDataStore;
 import calico.CalicoDraw;
