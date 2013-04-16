@@ -647,6 +647,7 @@ public class CGroupController
 		}
 		
 		groupdb.get(uuid).setPermanent(isperm);
+		recheck_parent(uuid);
 		
 		if (BubbleMenu.isBubbleMenuActive() && BubbleMenu.activeUUID == uuid)
 		{

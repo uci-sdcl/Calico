@@ -829,6 +829,7 @@ public class CGroupController
 		if(!exists(uuid)){return;}
 		
 		groups.get(uuid).setPermanent(isPerm);
+		recheck_parent(uuid);
 	}
 	public static void set_permanent(final long uuid, final boolean isPerm)
 	{
