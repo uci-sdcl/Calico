@@ -285,6 +285,12 @@ public class CCanvasController
 		}
 		canvases.get( get_arrow_canvas(uuid) ).saveCurrentCanvasState();
 	}
+	
+	/**
+	 * This method doesn't work.
+	 * @param uuid
+	 */
+	@Deprecated
 	public static void snapshot_connector(long uuid)
 	{
 		long cuid = get_connector_canvas(uuid);

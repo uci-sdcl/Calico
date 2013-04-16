@@ -1137,7 +1137,7 @@ public class ProcessQueue
 		
 		if(client!=null)
 		{
-			CCanvasController.snapshot_connector(uuid);
+			CCanvasController.snapshot(cuid);
 		}
 	}
 	
@@ -1220,6 +1220,12 @@ public class ProcessQueue
 		}
 		
 		ClientManager.send_except(client, p);
+		
+		if (client != null)
+		{
+			ComposableElement elem = ComposableElementController.elementList.get(element.getComponentUUID()).get(element.getElementUUID());
+				
+		}
 	}
 	
 	public static void ELEMENT_REMOVE(CalicoPacket p, Client client)

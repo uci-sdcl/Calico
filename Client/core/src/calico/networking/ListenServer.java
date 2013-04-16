@@ -56,16 +56,16 @@ public class ListenServer implements Runnable
 	public static Logger logger = Logger.getLogger(ListenServer.class.getName());
 	
 	private InputStream in = null;
-	private static ProgressMonitor progressMonitor;
-	private int previousProgress = 0;
+
 	
 	private long lastHeartBeatFromServer;
 	
 	public ListenServer()
 	{
 		openInputStream();
+		(new ListenServerQueue()).start();
 		
-		startProgressMonitor();
+		
 //			CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE_START, CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE_START, ((double)0), 
 //					((double)100), "Synchronizing with server... "));
 		
@@ -148,12 +148,8 @@ public class ListenServer implements Runnable
 						if (offset + available > size)
 							available = size - offset;
 						in.read(tpack.getBuffer(), offset, available);
-//						BinIO.loadBytes(this.in, tpack.getBuffer(), offset, available);
 						offset += available;
-//						if (size > CalicoOptions.network.cluster_size)
-//						{
-//							System.out.println("Loading large packet (" + size + "), " + (/() * 100 + " percent complete");
-//						}
+
 				        if (showProgressBar)
 							CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE, 
 									CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE, (double)offset, 
@@ -162,14 +158,6 @@ public class ListenServer implements Runnable
 					if (showProgressBar)
 						CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE_FINISHED, CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE_FINISHED, 1d, 1d, msg));
 					
-//					while (available < size)
-//					{
-//	//					logger.info("Input stream doesn't have enough byte, blocking for 10ms. (Need: " + size + ", has: " + available);
-//						Thread.sleep(1l);
-//						available = in.available();
-//					}
-					
-//					in.read( tpack.getBuffer() );
 					
 					if(logger.isTraceEnabled())
 					{
@@ -179,7 +167,8 @@ public class ListenServer implements Runnable
 					// Catching this here so that it doesn't disconnect the client
 					try
 					{
-						PacketHandler.receive(tpack);
+						Networking.recvQueue.offer(tpack);
+//						PacketHandler.receive(tpack);
 					}
 					catch (Exception e)
 					{
@@ -187,62 +176,7 @@ public class ListenServer implements Runnable
 						e.printStackTrace();
 					}
 					Networking.receivingPacketsFromServer = false;
-					
-					if (Networking.connectionState != Networking.ConnectionState.Connected)
-					{
-						if (progressMonitor == null)
-						{
-//							CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE_START, CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE_START, ((double)0), 
-//									((double)100), "Synchronizing with server... "));
-							startProgressMonitor();
-						}
-						else if (tpack.getCommand() == NetworkCommand.CONSISTENCY_FINISH)
-						{
-//							CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE_FINISHED, CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE_FINISHED, ((double)100), 
-//									((double)100), "Synchronizing with server... "));
-							progressMonitor.close();
-							progressMonitor = null;
-							Networking.connectionState = Networking.ConnectionState.Connected;
-							continue;
-						}
-						else if (progressMonitor.isCanceled()) {
-			                System.exit(0);
-			            }
-						double cuuid = new Long(tpack.getCUUID()).doubleValue();
-						int progress = 1;
-						if (tpack.getCommand() == NetworkCommand.CANVAS_LOAD_PROGRESS)
-						{
-						
-						tpack.rewind();
-						tpack.getInt();
-						int canvasPos = tpack.getInt();
-						int totalCanvases = tpack.getInt();
-						
-						progress = new Double(((canvasPos*100d) / (totalCanvases*100d)) * 100).intValue();
-						}
-						if (progress < previousProgress && progress < 101)
-							progress = previousProgress;
-//						int progress = 0;
-						
-//						CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE, 
-//								CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE, ((double)progress), 
-//								((double)100), "Synchronizing with server... "));
-											
-//						if (progress >= 0)
-//						{
-							progressMonitor.setProgress(progress);
-				            String message =
-				                String.format("Completed %d%%.\n", progress);
-				            progressMonitor.setNote(message);
-	
-//						}
-						previousProgress = progress;
-					}
-					else if (Networking.connectionState == Networking.connectionState.Connected && progressMonitor != null)
-					{
-						progressMonitor.close();
-						progressMonitor = null;
-					}
+
 				}
 				catch (InterruptedException e1) {
 					e1.printStackTrace();
@@ -251,76 +185,23 @@ public class ListenServer implements Runnable
 				}
 				catch(Exception e)
 				{
-//					logger.error("Inputstream lost connection to the server! Attempting to reconnect...");
-					
-//					e.printStackTrace();
+
 					try {
 						Thread.sleep(1000l);
-//						logger.debug("Attempting to connect in: ");
-//						logger.debug("5... ");
-//						Thread.sleep(1000l);
-//						logger.debug("4... ");
-//						Thread.sleep(1000l);
-//						logger.debug("3... ");
-//						Thread.sleep(1000l);
-//						logger.debug("2... ");
-//						Thread.sleep(1000l);
-//						logger.debug("1... ");
-//						Thread.sleep(1000l);
+
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
 					if (!Networking.socket.isConnected())
 						continue;
 
-//					Networking.connectToServer();
 					openInputStream();
 				}
 				
 			}//while
-//		}
-//		catch(CalicoLostServerConnectionException clsce)
-//		{
-//			logger.fatal("We lost our connection to the server!");
-//			try {
-//				Networking.socket.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			System.exit(1);
-//		}
-//		catch(IllegalStateException ise)
-//		{
-//			logger.fatal("The receive queue has exploded.");
-//			ise.printStackTrace();
-//		}
-//		
-//		catch(IOException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		catch(InterruptedException e)
-//		{
-//			logger.error(e.getMessage());
-//			e.printStackTrace();
-//		}
-//		catch(Exception e)
-//		{
-//			//Networking.recvQueue.put(new CalicoPacket(rdata));
-//			e.printStackTrace();
-//		}
 	}
 	
-	public static void startProgressMonitor()
-	{
-		progressMonitor = new ProgressMonitor(CalicoDataStore.calicoObj,
-                "Synchronizing with server: " + CalicoDataStore.ServerHost,
-                "", 0, 100);
-		progressMonitor.setProgress(0);
-		progressMonitor.setMillisToPopup(1);
-		progressMonitor.setMillisToDecideToPopup(1);
-	}
+
 }
 
 

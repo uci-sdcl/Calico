@@ -27,6 +27,8 @@
  ******************************************************************************/
 package calico.components.bubblemenu.strokes;
 
+import java.awt.Polygon;
+
 import calico.Calico;
 import calico.CalicoDataStore;
 import calico.components.piemenu.PieMenuButton;
@@ -62,12 +64,13 @@ public class StrokeMakeConnectorButton extends PieMenuButton
 		{
 			long new_uuid = Calico.uuid();
 			//Create the connector
-			CConnectorController.create(new_uuid, CCanvasController.getCurrentUUID(), CalicoDataStore.PenColor, 
-					CalicoDataStore.PenThickness, CStrokeController.strokes.get(uuid).getRawPolygon(), 0l, 0l);
+			
+			Polygon rawPolygon = CStrokeController.strokes.get(uuid).getRawPolygon();
 			CStrokeController.strokes.get(uuid).highlight_off();
 			CStrokeController.delete(uuid);
-
-			
+			CConnectorController.create(new_uuid, CCanvasController.getCurrentUUID(), CalicoDataStore.PenColor, 
+					CalicoDataStore.PenThickness, rawPolygon, 0l, 0l);
+						
 			CConnectorController.show_stroke_bubblemenu(new_uuid, false);
 			
 		}
