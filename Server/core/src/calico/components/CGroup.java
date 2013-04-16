@@ -920,8 +920,8 @@ public class CGroup {
 		// Check to see if any groups are inside of this.
 		if (grouparr.length > 0) {
 			for (int i = 0; i < grouparr.length; i++) {
-				if (CGroupController.canParentChild(this.uuid, grouparr[i], x, y)
-						&& CGroupController.group_contains_group(this.uuid, grouparr[i])) 
+				if (/*CGroupController.canParentChild(this.uuid, grouparr[i], x, y)
+						&&*/ CGroupController.group_contains_group(this.uuid, grouparr[i])) 
 				{
 					// it is contained in the group, so set it's parent
 					CGroupController.no_notify_set_parent(grouparr[i], this.uuid);
