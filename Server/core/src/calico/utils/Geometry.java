@@ -575,7 +575,7 @@ public class Geometry {
 
 		area *= 0.5;
 
-		return area;
+		return Math.abs(area);
 	}
 	
 	public static double computePolygonArea (Polygon poly)

@@ -63,8 +63,6 @@ public class ProcessQueue
 	
 	}
 
-
-
 	public static void receive(int command,Client client, CalicoPacket pdata)
 	{
 		try

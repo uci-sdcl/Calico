@@ -709,7 +709,7 @@ public final class Geometry
 
 
 	/**
-	 * Compute the area of the specfied polygon.
+	 * Compute the area of the specified polygon.
 	 * 
 	 * @param x  X coordinates of polygon.
 	 * @param y  Y coordinates of polygon.   
@@ -726,7 +726,7 @@ public final class Geometry
 
 		area *= 0.5;
 
-		return area;
+		return Math.abs(area);
 	}
 	
 	public static double computePolygonArea (Polygon poly)
