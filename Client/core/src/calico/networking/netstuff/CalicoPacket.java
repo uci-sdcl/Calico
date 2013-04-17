@@ -56,7 +56,23 @@ public class CalicoPacket
 
 	public CalicoPacket(int size)
 	{
-		this.buffer = new byte[size];
+		long freeMemory = Runtime.getRuntime().freeMemory();
+		if (size < freeMemory)
+			this.buffer = new byte[size];
+		else
+		{
+			Runtime.getRuntime().gc();
+			freeMemory = Runtime.getRuntime().freeMemory();
+			if (size < freeMemory)
+			{
+				this.buffer = new byte[0];
+			}
+			else
+			{
+				System.out.println("Warning, not enough free memory! Requested: " + size +", available: " + freeMemory);
+				(new Exception()).printStackTrace();
+			}
+		}
 		this.length = size;
 		this.position = 0;
 	}

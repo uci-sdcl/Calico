@@ -147,19 +147,20 @@ public class ListenServer implements Runnable
 						available = in.available();
 						if (offset + available > size)
 							available = size - offset;
-						in.read(tpack.getBuffer(), offset, available);
+						if (tpack.getBufferSize() > 0)
+							in.read(tpack.getBuffer(), offset, available);
 						offset += available;
 
 				        if (showProgressBar)
 							CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE, 
 									CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE, (double)offset, 
-									(double)size, msg));	
+									(double)size, msg));
 					}
 					if (showProgressBar)
 						CalicoEventHandler.getInstance().fireEvent(NetworkCommand.STATUS_SENDING_LARGE_FILE_FINISHED, CalicoPacket.getPacket(NetworkCommand.STATUS_SENDING_LARGE_FILE_FINISHED, 1d, 1d, msg));
 					
 					
-					if(logger.isTraceEnabled())
+					if(logger.isTraceEnabled() && tpack.getBufferSize() > 0)
 					{
 						logger.trace("rx " + tpack.toString());
 					}
@@ -167,7 +168,8 @@ public class ListenServer implements Runnable
 					// Catching this here so that it doesn't disconnect the client
 					try
 					{
-						Networking.recvQueue.offer(tpack);
+						if (tpack.getBufferSize() > 0)
+							Networking.recvQueue.offer(tpack);
 //						PacketHandler.receive(tpack);
 					}
 					catch (Exception e)
