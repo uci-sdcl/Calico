@@ -60,6 +60,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -318,6 +319,14 @@ public class Calico extends JFrame
 
 		CalicoDataStore.calicoObj = this;
 		CalicoDataStore.messageHandlerObj = StatusMessageHandler.getInstance();
+
+		try { 
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); 
+		} 
+		catch(Exception e) 
+		{ 
+			System.out.println("Error setting Java LAF: " + e); 
+		}
 
 		// Run the setup methods
 		CArrowController.setup();
