@@ -29,7 +29,10 @@ package calico.controllers;
 
 import it.unimi.dsi.fastutil.longs.Long2ReferenceArrayMap;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.BufferedInputStream;
@@ -51,11 +54,14 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
+import org.imgscalr.Scalr;
 
 import sun.awt.image.ImageFetchable;
+import sun.awt.image.ToolkitImage;
 
 import calico.*;
 import calico.components.CGroup;
+import calico.networking.Networking;
 import calico.networking.netstuff.ByteUtils;
 import calico.networking.netstuff.CalicoPacket;
 import calico.networking.netstuff.NetworkCommand;
@@ -204,8 +210,63 @@ public class CImageController
 		}
 	}
 	
-	public static CalicoPacket getImageTransferPacket(long uuid, long cuuid, int x, int y, File imageOnDisk)
+
+	
+	public static void resizeImageAndSend(final File imageOnDisk)
 	{
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				double maxHeight = 1024, maxWidth = 1280;
+
+				Image tempImage;
+				try {
+					tempImage = ImageIO.read(imageOnDisk);
+
+					ImageLoadedTrigger trigger = new ImageLoadedTrigger();
+					tempImage.getWidth(trigger);
+					
+					double scaledWidth = tempImage.getWidth(null);
+					double scaledHeight = tempImage.getHeight(null);
+
+					if (tempImage.getHeight(null) > maxHeight)
+					{
+						scaledWidth *= maxHeight / scaledHeight;
+						scaledHeight = maxHeight;
+					}
+					if (tempImage.getWidth(null) > maxWidth)
+					{
+						scaledHeight *= maxWidth / scaledWidth;
+						scaledWidth = maxWidth;
+					}
+
+					BufferedImage buffered = (BufferedImage)tempImage;
+					BufferedImage thumbnail = Scalr.resize(buffered, (int)scaledWidth, (int)scaledHeight);
+
+					//		int imageType = BufferedImage.TYPE_INT_ARGB;
+					//    	BufferedImage scaledBI = new BufferedImage(scaledWidth, scaledHeight, imageType);
+					//    	Graphics2D g = scaledBI.createGraphics();
+					//   		g.setComposite(AlphaComposite.Src);
+					//
+					//    	g.drawImage(tempImage, 0, 0, scaledWidth, scaledHeight, null);
+					//		g.dispose();
+
+					ImageIO.write(thumbnail, "png", imageOnDisk);
+		            Networking.send(CImageController.getImageTransferPacket(Calico.uuid(), CCanvasController.getCurrentUUID(), 
+		            		50, 50, imageOnDisk));
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+		}).start();
+
+	}
+	
+	public static CalicoPacket getImageTransferPacket(long uuid, long cuuid, int x, int y, File imageOnDisk)
+	{		
 		byte[] bytes = getBytesFromDisk(imageOnDisk);
 		
 		if (bytes == null || bytes.length == 0)
@@ -322,3 +383,19 @@ public class CImageController
 
 	
 }
+
+class ImageLoadedTrigger implements ImageObserver {
+	
+	public boolean triggered = false;
+	public int width = 0;
+	public int height = 0;
+	
+	@Override
+	public boolean imageUpdate(Image img, int infoflags, int x, int y,
+			int width, int height) {
+			this.width = width;
+			this.height = height;
+			triggered = true;
+		return false;
+	}
+};

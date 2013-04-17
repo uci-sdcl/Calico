@@ -82,8 +82,9 @@ public class ImageCreateButton extends CanvasMenuButton {
 	        if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            File file = fc.getSelectedFile();
 	            CalicoDataStore.lastOpenedDirectory = file.getPath();
-	            Networking.send(CImageController.getImageTransferPacket(Calico.uuid(), CCanvasController.getCurrentUUID(), 
-	            		50, 50, file));
+	            CImageController.resizeImageAndSend(file);
+//	            Networking.send(CImageController.getImageTransferPacket(Calico.uuid(), CCanvasController.getCurrentUUID(), 
+//	            		50, 50, file));
 			}
 	//		if (this.uuid != 0l && new_uuid != 0l && CGroupController.groupdb.get(new_uuid).getParentUUID() == 0l)
 	//		{
