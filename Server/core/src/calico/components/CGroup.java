@@ -935,8 +935,8 @@ public class CGroup {
 				// We first check to make sure this element isnt parented to
 				// something else
 				// then we check to see if it contained in this group
-				if (/*CGroupController.canParentChild(this.uuid, bgearr[i], x, y)
-						&&*/ CGroupController.group_contains_stroke(this.uuid, bgearr[i])) 
+				if (CGroupController.canParentChild(this.uuid, bgearr[i], x, y)
+						&& CGroupController.group_contains_stroke(this.uuid, bgearr[i])) 
 				{
 					// it is contained in the group, so set it's parent
 					// CStrokeController.no_notify_set_parent(bgearr[i],
