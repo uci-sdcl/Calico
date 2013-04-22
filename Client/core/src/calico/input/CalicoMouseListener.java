@@ -132,16 +132,15 @@ public class CalicoMouseListener implements MouseListener, MouseMotionListener, 
     	lastPoint = e.getPoint();
     }
     public void mouseMoved(MouseEvent e){
-    	if (CalicoMouseListener.leftPressed == false 
-    		&& lastPoint.distance(e.getPoint()) > 30)
+    	if (CalicoDataStore.enableHitachiStarboardFix == true
+    			&& CalicoMouseListener.leftPressed == false 
+    			&& lastPoint.distance(e.getPoint()) > 30)
     	{
     		mouseInfo.leftPressed = true;
     		CalicoMouseListener.leftPressed = true;
     		System.out.println("mouseMoved: leftPressed set to " + mouseInfo.leftPressed + ", " + System.currentTimeMillis());
     		CalicoInputManager.handleInput(new InputEventInfo(e.getPoint(), InputEventInfo.BUTTON_LEFT, e.getModifiers(), InputEventInfo.MOUSE_PRESSED, getButtonMaskFromMouseInfo(mouseInfo)));
     	}
-    	else
-    		System.out.println("mosueMoved: mouseInfo.leftPressed still set to true");
     	
     	lastPoint = e.getPoint();
     }

@@ -47,6 +47,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.Random;
 
@@ -200,7 +201,7 @@ public class Calico extends JFrame
 		// logger.debug("Color: "+rp+","+gp+","+bp);
 
 		Thread.currentThread().setName("Calico Main");
-
+		
 		// We load the conf/calico.conf file
 		CalicoOptions.setup();
 		CalicoDataStore.setup();
@@ -238,9 +239,15 @@ public class Calico extends JFrame
 
 	private static void setPropertiesFromArgs(String[] args)
 	{
+		System.out.println(Arrays.toString(args));
 		for (int i = 0; i < args.length; i++)
 		{
-			if (args[i].charAt(0) == '-' && i + 1 < args.length)
+			if (args[i].compareTo("-hitachistarboardfix") == 0)
+			{
+				CalicoDataStore.enableHitachiStarboardFix = true;
+				System.out.println("Enabling starboard fix");
+			}
+			else if (args[i].charAt(0) == '-' && i + 1 < args.length)
 			{
 				if (args[i].compareTo("-ipaddress") == 0)
 				{
@@ -291,6 +298,7 @@ public class Calico extends JFrame
 						CalicoDataStore.isFullScreen = true;
 					System.out.println("Setting ScreenHeight to " + CalicoDataStore.ScreenHeight);
 				}
+
 			}
 		}
 		if (CalicoDataStore.ServerHost == null || CalicoDataStore.ServerPort == 0 || CalicoDataStore.StressTestInterval == Integer.MAX_VALUE

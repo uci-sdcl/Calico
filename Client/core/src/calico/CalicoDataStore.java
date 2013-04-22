@@ -72,6 +72,8 @@ public class CalicoDataStore
 	
 	public static String default_email = "";
 	
+	public static boolean enableHitachiStarboardFix = false;
+	
 	/**
 	 * This is the current operating mode we are in
 	 */
