@@ -33,9 +33,11 @@ import calico.inputhandlers.InputEventInfo;
 
 import java.awt.Component;
 import java.awt.event.*;
+import java.awt.Point;
 
 public class CalicoMouseListener implements MouseListener, MouseMotionListener, MouseWheelListener
 {
+	
 	public class MouseInfo
 	{
 		public boolean leftPressed = false;
@@ -43,7 +45,11 @@ public class CalicoMouseListener implements MouseListener, MouseMotionListener, 
 		public boolean middlePressed = false;
 	}
 	
+	private static boolean leftPressed = false;
+	
 	private MouseInfo mouseInfo = new MouseInfo();
+	
+	private Point lastPoint = new Point(0,0);
 	
 	/*
 	java.awt.event.MouseEvent[
@@ -64,14 +70,21 @@ public class CalicoMouseListener implements MouseListener, MouseMotionListener, 
 	public void mouseDragged(MouseEvent e)
 	{
 		CalicoInputManager.handleInput(new InputEventInfo(e.getPoint(), getButtonFromMouseEvent(e), e.getModifiers(), InputEventInfo.MOUSE_DRAGGED, getButtonMaskFromMouseInfo(mouseInfo)));
+		lastPoint = e.getPoint();
     }
 
 
 	public void mousePressed(MouseEvent e)
 	{
+		if (mouseInfo.leftPressed == true
+				|| CalicoMouseListener.leftPressed == true)
+			return;
+		
 		if(e.getButton()==MouseEvent.BUTTON1)
 		{
 			mouseInfo.leftPressed = true;
+			CalicoMouseListener.leftPressed = true;
+			System.out.println("mousePressed: leftPressed set to " + mouseInfo.leftPressed + ", " + System.currentTimeMillis());
 		}
 		else if(e.getButton()==MouseEvent.BUTTON2)
 		{
@@ -84,36 +97,62 @@ public class CalicoMouseListener implements MouseListener, MouseMotionListener, 
 			
 		//Calico.log_debug(e.toString());
 		CalicoInputManager.handleInput(new InputEventInfo(e.getPoint(), getButtonFromMouseEvent(e), e.getModifiers(), InputEventInfo.MOUSE_PRESSED, getButtonMaskFromMouseInfo(mouseInfo)));
+		lastPoint = e.getPoint();
 	}
 
 	public void mouseReleased(MouseEvent e)
 	{
-		if(e.getButton()==MouseEvent.BUTTON1)
-		{
+//		if(e.getButton()==MouseEvent.BUTTON1)
+//		{
 			mouseInfo.leftPressed = false;
-		}
-		else if(e.getButton()==MouseEvent.BUTTON2)
-		{
+			CalicoMouseListener.leftPressed = false;
+			System.out.println("mouseReleased: leftPressed set to " + mouseInfo.leftPressed + ", " + System.currentTimeMillis());
+//		}
+//		else if(e.getButton()==MouseEvent.BUTTON2)
+//		{
 			mouseInfo.middlePressed = false;
-		}
-		else if(e.getButton()==MouseEvent.BUTTON3)
-		{
+//		}
+//		else if(e.getButton()==MouseEvent.BUTTON3)
+//		{
 			mouseInfo.rightPressed = false;
-		}
+//		}
 		
 		CalicoInputManager.handleInput(new InputEventInfo(e.getPoint(), getButtonFromMouseEvent(e), e.getModifiers(), InputEventInfo.MOUSE_RELEASED, getButtonMaskFromMouseInfo(mouseInfo)));
+		lastPoint = e.getPoint();
 	}
 
 
 	// IGNORED
-    public void mouseEntered(MouseEvent e){}
-    public void mouseExited(MouseEvent e){}
-    public void mouseMoved(MouseEvent e){}
-	public void mouseClicked(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){
+    	System.out.println("Mouse entered, " + System.currentTimeMillis());
+    	lastPoint = e.getPoint();
+    }
+    public void mouseExited(MouseEvent e){
+    	System.out.println("Mouse exited, " + System.currentTimeMillis());
+    	lastPoint = e.getPoint();
+    }
+    public void mouseMoved(MouseEvent e){
+    	if (CalicoMouseListener.leftPressed == false 
+    		&& lastPoint.distance(e.getPoint()) > 30)
+    	{
+    		mouseInfo.leftPressed = true;
+    		CalicoMouseListener.leftPressed = true;
+    		System.out.println("mouseMoved: leftPressed set to " + mouseInfo.leftPressed + ", " + System.currentTimeMillis());
+    		CalicoInputManager.handleInput(new InputEventInfo(e.getPoint(), InputEventInfo.BUTTON_LEFT, e.getModifiers(), InputEventInfo.MOUSE_PRESSED, getButtonMaskFromMouseInfo(mouseInfo)));
+    	}
+    	else
+    		System.out.println("mosueMoved: mouseInfo.leftPressed still set to true");
+    	
+    	lastPoint = e.getPoint();
+    }
+	public void mouseClicked(MouseEvent e){
+		System.out.println("Mouse clicked, " + System.currentTimeMillis());
+		lastPoint = e.getPoint();
+	}
 
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
-		Calico.logger.debug(e.toString());
+//		Calico.logger.debug(e.toString());
 		CalicoInputManager.handleInput(new InputEventInfo(e.getPoint(), e.getWheelRotation(), e.getScrollType(), e.getScrollAmount()));
 	}
 	
