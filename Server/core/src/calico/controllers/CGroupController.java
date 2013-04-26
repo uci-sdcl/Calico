@@ -1276,7 +1276,8 @@ public class CGroupController
 
 	public static boolean canParentChild(long potentialParent, long child, int x, int y)
 	{
-		if (!exists(potentialParent) || !exists(child))
+		if (!exists(potentialParent) 
+				|| (!exists(child) && !CStrokeController.exists(child)))
 			return false;
 		
 		return groups.get(potentialParent).canParentChild(child, x, y);
@@ -1313,6 +1314,29 @@ public class CGroupController
 			 if (parent == ancestor)
 				 return true;
 			 uuid = parent;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param potentialParent
+	 * @param child
+	 * @return Returns true if potential parent can parent any ancestor of child.
+	 */
+	public static boolean group_can_parent_ancestor(long potentialParent, long child)
+	{
+		//if no ancestor, return false
+		if (groups.get(child).getParentUUID() == 0l)
+			return false;
+		
+		long uuid = child, parent;
+		
+		while (exists(uuid) && (parent = CGroupController.groups.get(uuid).getParentUUID()) != 0l)
+		{
+			if (groups.get(potentialParent).canParent(groups.get(parent).getPathReference()))
+				return true;
 		}
 		
 		return false;

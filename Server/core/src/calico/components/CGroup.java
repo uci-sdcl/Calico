@@ -753,17 +753,19 @@ public class CGroup {
 	 */
 	public boolean canParentChild(long child, int x, int y)
 	{
+		//A child cannot be parented to nothing or itself
 		if (child == 0l || child == this.uuid)
 			return false;
 		
+		//The parent must exist, and cannot be parented to a decorator
 		if (CGroupController.exists(getParentUUID())
 				&& CGroupController.groups.get(getParentUUID()) instanceof CGroupDecorator)
 			return false;
 		
-		long potentialParent_new_parent = 0l;
+//		long potentialParent_new_parent = 0l;
 		long child_parent = 0l;
 		
-		potentialParent_new_parent = getParentUUID();
+//		potentialParent_new_parent = getParentUUID();
 		
 		if (CStrokeController.strokes.containsKey(child))
 		{
@@ -778,21 +780,30 @@ public class CGroup {
 				 return false;
 			 //the parent must completely contain the child
 			 if (!CGroupController.group_contains_group(this.uuid, child))
-				 return false;
-			//The child should not be a temp scrap
+				 return false;		 
+			 //The child should not be a temp scrap
 			 if (!CGroupController.groups.get(child).isPermanent())
 				 return false;
 			 
 			child_parent = CGroupController.groups.get(child).getParentUUID();
 		}
 		
-		if (CGroupController.group_is_ancestor_of(child, this.uuid))
+//		if (CGroupController.group_is_ancestor_of(child, this.uuid))
+//			return false;
+		
+		if (canParentChild(child_parent, x, y))
 			return false;
+		//We don't want to parent something if we can parent its ancestor. I.e., if 
+		//	we select a scrap, we don't want to select all of the content on top of 
+		//	that scrap too
+//		if (CGroupController.group_can_parent_ancestor(this.uuid, child))
+//			return false;
 		
-		if (child_parent == 0l)
-			return true;
+//		if (child_parent == 0l)
+//			return true;
 		
-		return potentialParent_new_parent == child_parent;
+		return true;
+//		return potentialParent_new_parent == child_parent;
 	}
 
 	public CalicoPacket[] getUpdatePackets(long uuid, long cuid, long puid, int dx, int dy, boolean captureChildren) {
@@ -920,8 +931,8 @@ public class CGroup {
 		// Check to see if any groups are inside of this.
 		if (grouparr.length > 0) {
 			for (int i = 0; i < grouparr.length; i++) {
-				if (/*CGroupController.canParentChild(this.uuid, grouparr[i], x, y)
-						&&*/ CGroupController.group_contains_group(this.uuid, grouparr[i])) 
+				if (CGroupController.canParentChild(this.uuid, grouparr[i], x, y)
+						&& CGroupController.group_contains_group(this.uuid, grouparr[i])) 
 				{
 					// it is contained in the group, so set it's parent
 					CGroupController.no_notify_set_parent(grouparr[i], this.uuid);

@@ -962,8 +962,8 @@ public class CGroup extends PPath implements Serializable {
 				// We first check to make sure this element isnt parented to
 				// something else
 				// then we check to see if it contained in this group
-				if (/*CGroupController.canParentChild(this.uuid, bgearr[i], x, y)
-						&&*/ CGroupController.group_contains_stroke(this.uuid, bgearr[i])) {
+				if (CGroupController.canParentChild(this.uuid, bgearr[i], x, y)
+						&& CGroupController.group_contains_stroke(this.uuid, bgearr[i])) {
 					// it is contained in the group, so set it's parent
 					// CStrokeController.no_notify_set_parent(bgearr[i],
 					// this.uuid);
@@ -2270,17 +2270,19 @@ public class CGroup extends PPath implements Serializable {
 	 */
 	public boolean canParentChild(long child, int x, int y)
 	{
+		//A child cannot be parented to nothing or itself
 		if (child == 0l || child == this.uuid)
 			return false;
 		
+		//The parent must exist, and cannot be parented to a decorator
 		if (CGroupController.exists(getParentUUID())
 				&& CGroupController.groupdb.get(getParentUUID()) instanceof CGroupDecorator)
 			return false;
 		
-		long potentialParent_new_parent = 0l;
+//		long potentialParent_new_parent = 0l;
 		long child_parent = 0l;
 		
-		potentialParent_new_parent = getParentUUID();
+//		potentialParent_new_parent = getParentUUID();
 		
 		if (CStrokeController.strokes.containsKey(child))
 		{
@@ -2303,13 +2305,22 @@ public class CGroup extends PPath implements Serializable {
 			child_parent = CGroupController.groupdb.get(child).getParentUUID();
 		}
 		
-		if (CGroupController.group_is_ancestor_of(child, this.uuid))
+//		if (CGroupController.group_is_ancestor_of(child, this.uuid))
+//			return false;
+		
+		//We don't want to parent something if we can parent its ancestor. I.e., if 
+		//	we select a scrap, we don't want to select all of the content on top of 
+		//	that scrap too
+		if (canParentChild(child_parent, x, y))
 			return false;
+//		if (CGroupController.group_can_parent_ancestor(this.uuid, child_parent))
+//			return false;
 		
-		if (child_parent == 0l)
-			return true;
+//		if (child_parent == 0l)
+//			return true;
 		
-		return potentialParent_new_parent == child_parent;
+		return true;
+//		return potentialParent_new_parent == child_parent;
 	}
 
 	public void recheckParentAfterMove() {
