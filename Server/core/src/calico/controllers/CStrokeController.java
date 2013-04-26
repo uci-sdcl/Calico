@@ -248,7 +248,7 @@ public class CStrokeController
 		//always send out parenting packets when a new parent is calculated.
 		//Wayne: NOPE
 		//ClientManager.send(strokes.get(uuid).calculateParent());
-		strokes.get(uuid).calculateParent();
+//		strokes.get(uuid).calculateParent();
 	}
 
 	

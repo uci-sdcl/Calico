@@ -1334,9 +1334,9 @@ public class PacketHandler
 		CStrokeController.strokes.get(uuid).primative_rotate(rotation);
 		CStrokeController.strokes.get(uuid).primative_scale(scaleX, scaleY);
 		
-		//CStrokeController.strokes.get(uuid).finish();
+		CStrokeController.strokes.get(uuid).finish();
 		
-		CStrokeController.no_notify_finish(uuid);
+//		CStrokeController.no_notify_finish(uuid);
 		
 //		newTime = System.currentTimeMillis(); System.out.println("~~~ P3 Delta time: " + (newTime - time)); newTime = time;
 	}
