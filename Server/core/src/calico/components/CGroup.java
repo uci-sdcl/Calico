@@ -757,6 +757,15 @@ public class CGroup {
 		if (child == 0l || child == this.uuid)
 			return false;
 		
+		//The child cannot be already be parented to a decorator because
+		//	this causes crazy things to happen with things like the list.
+		if (CGroupController.exists(child)
+				&& CGroupController.groups.get(child).getParentUUID() != 0l
+				&& CGroupController.groups.get(CGroupController.getDecoratorParent(
+						CGroupController.groups.get(child).getParentUUID()))
+					instanceof CGroupDecorator)
+			return false;
+		
 		//The parent must exist, and cannot be parented to a decorator
 		if (CGroupController.exists(getParentUUID())
 				&& CGroupController.groups.get(getParentUUID()) instanceof CGroupDecorator)

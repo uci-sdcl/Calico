@@ -1313,7 +1313,12 @@ public class CGroupController
 		groupdb.get(uuid).deleteChildConnector(childuid);
 	}
 	
-	private static long getDecoratorParent(long uuid)
+	/**
+	 * Returns the outermost decorator for the scrap uuid
+	 * @param uuid
+	 * @return
+	 */
+	public static long getDecoratorParent(long uuid)
 	{
 		if (!exists(uuid)) { return 0l; }
 		

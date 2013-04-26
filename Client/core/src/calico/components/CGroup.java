@@ -2274,6 +2274,15 @@ public class CGroup extends PPath implements Serializable {
 		if (child == 0l || child == this.uuid)
 			return false;
 		
+		//The child cannot be already be parented to a decorator because
+		//	this causes crazy things to happen with things like the list.
+		if (CGroupController.exists(child)
+				&& CGroupController.groupdb.get(child).getParentUUID() != 0l
+				&& CGroupController.groupdb.get(CGroupController.getDecoratorParent(
+						CGroupController.groupdb.get(child).getParentUUID()))
+					instanceof CGroupDecorator)
+			return false;
+		
 		//The parent must exist, and cannot be parented to a decorator
 		if (CGroupController.exists(getParentUUID())
 				&& CGroupController.groupdb.get(getParentUUID()) instanceof CGroupDecorator)
