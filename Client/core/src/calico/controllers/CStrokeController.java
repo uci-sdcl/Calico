@@ -854,7 +854,9 @@ public class CStrokeController
 			tempArea = Geometry.computePolygonArea(temp);
 			if (temp.contains(p) 
 					&& tempArea < strokeArea
-					&& new Point(temp.xpoints[0],temp.ypoints[0]).distance(new Point(temp.xpoints[temp.npoints-1],temp.ypoints[temp.npoints-1])) < 100)
+					&& new Point(temp.xpoints[0],temp.ypoints[0])
+						.distance(new Point(temp.xpoints[temp.npoints-1],temp.ypoints[temp.npoints-1])) 
+						< calico.CalicoOptions.pen.press_and_hold_menu_radius * 4)
 			{
 				smallestStroke = strokes[i];
 				strokeArea = tempArea;

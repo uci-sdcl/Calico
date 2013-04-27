@@ -388,6 +388,14 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 				long potentialConnector = CStrokeController.getPotentialConnector(lastPoint.getPoint(), 20);
 				if (potentialConnector > 0l)
 					calico.controllers.CStrokeController.show_stroke_bubblemenu(potentialConnector, false);
+				long potentialScrap = CStrokeController.getPotentialScrap(lastPoint.getPoint());
+				if (potentialConnector == 0l && potentialScrap > 0l)
+				{
+					// {
+					CStroke stroke = CStrokeController.strokes.get(potentialScrap);
+					long previewScrap = stroke.createTemporaryScrapPreview(false);
+					CGroupController.show_group_bubblemenu(previewScrap, PieMenuButton.SHOWON_SCRAP_CREATE, true);
+				}
 			}
 			CCanvasStrokeModeInputHandler.deleteSmudge = true;			
 //			CStrokeController.no_notify_delete(CStrokeController.getCurrentUUID());
