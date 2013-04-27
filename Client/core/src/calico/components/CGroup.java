@@ -2258,12 +2258,6 @@ public class CGroup extends PPath implements Serializable {
 	}
 	
 	/**
-	 * A new scrap can steal a child from another scrap if the following hold true:
-	 * 		1) That new scrap will become a child of the scrap it will be stealing elements from
-	 * 		2) The child it is stealing must be contained by the new scrap
-	 * 		3) The child's immediate parent must be the same as the new scrap's immediate parent
-	 * 			(aka. the scrap that the new scrap is stealing children from)
-	 * 
 	 * @param potentialParent
 	 * @param child
 	 * @return
@@ -2288,48 +2282,33 @@ public class CGroup extends PPath implements Serializable {
 				&& CGroupController.groupdb.get(getParentUUID()) instanceof CGroupDecorator)
 			return false;
 		
-//		long potentialParent_new_parent = 0l;
-		long child_parent = 0l;
-		
-//		potentialParent_new_parent = getParentUUID();
-		
 		if (CStrokeController.strokes.containsKey(child))
 		{
 			 if (!CGroupController.group_contains_stroke(this.uuid, child))
 				 return false;
-			child_parent = CStrokeController.strokes.get(child).getParentUUID();
 		}
 		else if (CGroupController.groupdb.containsKey(child))
 		{
+			CGroup childGroup = CGroupController.groupdb.get(child);
 			//the area of the child must be smaller than the area of the parent
-			 if (getArea() < CGroupController.groupdb.get(child).getArea())
+			 if (getArea() < childGroup.getArea())
 				 return false;
 			 //the parent must completely contain the child
-			 if (!CGroupController.group_contains_group(this.uuid, child))
+			 if (!CGroupController.group_contains_group(this.uuid, childGroup.uuid))
 				 return false;		 
 			 //The child should not be a temp scrap
-			 if (!CGroupController.groupdb.get(child).isPermanent())
+			 if (!childGroup.isPermanent())
 				 return false;
-			 
-			child_parent = CGroupController.groupdb.get(child).getParentUUID();
 		}
 		
-//		if (CGroupController.group_is_ancestor_of(child, this.uuid))
-//			return false;
 		
 		//We don't want to parent something if we can parent its ancestor. I.e., if 
 		//	we select a scrap, we don't want to select all of the content on top of 
 		//	that scrap too
-		if (canParentChild(child_parent, x, y))
+		if (CGroupController.group_can_parent_ancestor(this.uuid, child,x,y))
 			return false;
-//		if (CGroupController.group_can_parent_ancestor(this.uuid, child_parent))
-//			return false;
-		
-//		if (child_parent == 0l)
-//			return true;
-		
+			
 		return true;
-//		return potentialParent_new_parent == child_parent;
 	}
 
 	public void recheckParentAfterMove() {
