@@ -852,7 +852,9 @@ public class CStrokeController
 		{
 			temp = CStrokeController.strokes.get(strokes[i]).getPolygon();
 			tempArea = Geometry.computePolygonArea(temp);
-			if (temp.contains(p) && tempArea < strokeArea)
+			if (temp.contains(p) 
+					&& tempArea < strokeArea
+					&& new Point(temp.xpoints[0],temp.ypoints[0]).distance(new Point(temp.xpoints[temp.npoints-1],temp.ypoints[temp.npoints-1])) < 100)
 			{
 				smallestStroke = strokes[i];
 				strokeArea = tempArea;
