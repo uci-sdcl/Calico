@@ -155,7 +155,31 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 			mouseDown = e.getPoint();
 			
 			long potentialConnector;
-			if (!BubbleMenu.isBubbleMenuActive() &&
+			long connector;
+			long potentialScrap;
+			
+			if ((potentialScrap = CStrokeController.getPotentialScrap(e.getPoint())) > 0l)
+			{
+				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
+				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), potentialScrap, layer);
+				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
+				this.activeGroup = potentialScrap;
+			} 
+			else if ((potentialConnector = CStrokeController.getPotentialConnector(e.getPoint(), 20)) > 0l)
+			{
+				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
+				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), potentialConnector, layer);
+				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
+				this.activeGroup = potentialConnector;
+			}
+			else if ((connector = CConnectorController.getNearestConnector(e.getPoint(), 20)) > 0l)
+			{
+				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
+				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), connector, layer);
+				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
+				this.activeGroup = connector;
+			}
+			else if (!BubbleMenu.isBubbleMenuActive() &&
 					(this.activeGroup = CGroupController.get_smallest_containing_group_for_point(CCanvasController.getCurrentUUID(), e.getPoint())) != 0l)
 			{
 				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
@@ -163,18 +187,6 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 						e.getPoint(), this.activeGroup, layer);
 				Ticker.scheduleIn(250, menuTimer);
 			}
-			else if ((potentialConnector = CStrokeController.getPotentialConnector(e.getPoint(), 20)) > 0l)
-			{
-				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
-				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), potentialConnector, layer);
-				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
-			}
-			else if (CStrokeController.getPotentialScrap(e.getPoint()) > 0l)
-			{
-				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
-				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), e.group, layer);
-				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
-			} 
 //			menuThread = new DisplayMenuThread(this, e.getGlobalPoint(), e.group);		
 //			Ticker.scheduleIn(CalicoOptions.core.hold_time, menuThread);
 		}
@@ -264,9 +276,9 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 					CStrokeController.finish(strokeUID);
 			}
 			
-			long nearestConnector = CConnectorController.getNearestConnector(e.getPoint(), 20);
-			if (nearestConnector > 0l)
-				deleteSmudge = true;
+//			long nearestConnector = CConnectorController.getNearestConnector(e.getPoint(), 20);
+//			if (nearestConnector > 0l)
+//				deleteSmudge = true;
 
 			hasStartedBge = false;
 			boolean isSmudge = false;
@@ -307,10 +319,10 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 				}*/
 				CalicoAbstractInputHandler.clickMenu(strokeUID, 0l, mouseDown);
 			}
-			else if (nearestConnector > 0l && isSmudge)
-			{
-				CConnectorController.show_stroke_bubblemenu(nearestConnector, false);
-			}
+//			else if (nearestConnector > 0l && isSmudge)
+//			{
+//				CConnectorController.show_stroke_bubblemenu(nearestConnector, false);
+//			}
 			else if (CStrokeController.exists(strokeUID))
 			{
 				
@@ -367,7 +379,16 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 			calico.inputhandlers.groups.CGroupScrapModeInputHandler.startDrag = true;
 			
 //			this.parentHandler.routeToHandler_actionPressed(CInputMode.SCRAP, this.lastPoint);
-			CGroupController.show_group_bubblemenu(this.activeGroup);
+			if (CConnectorController.exists(this.activeGroup))
+				CConnectorController.show_stroke_bubblemenu(this.activeGroup, false);
+			else if (CGroupController.exists(this.activeGroup))
+				CGroupController.show_group_bubblemenu(this.activeGroup);
+			else if (CStrokeController.exists(this.activeGroup))
+			{
+				long potentialConnector = CStrokeController.getPotentialConnector(lastPoint.getPoint(), 20);
+				if (potentialConnector > 0l)
+					calico.controllers.CStrokeController.show_stroke_bubblemenu(potentialConnector, false);
+			}
 			CCanvasStrokeModeInputHandler.deleteSmudge = true;			
 //			CStrokeController.no_notify_delete(CStrokeController.getCurrentUUID());
 //			CStrokeController.setCurrentUUID(0l);

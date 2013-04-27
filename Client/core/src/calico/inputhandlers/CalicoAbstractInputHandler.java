@@ -371,14 +371,6 @@ public abstract class CalicoAbstractInputHandler
 		{
 			
 		}
-		else if (CConnectorController.exists(group))
-		{
-			CConnectorController.show_stroke_bubblemenu(group, false);
-		}
-		else if (CStrokeController.exists(group))
-		{
-			CStrokeController.show_stroke_bubblemenu(group, false);
-		}
 		else if (potentialScrap > 0l || (potentialScrap) > 0l)
 		{
 			CStroke stroke = CStrokeController.strokes.get(potentialScrap);
@@ -388,6 +380,14 @@ public abstract class CalicoAbstractInputHandler
 			CGroupController.show_group_bubblemenu(previewScrap, PieMenuButton.SHOWON_SCRAP_CREATE, true);
 			// }
 
+		}
+		else if (CConnectorController.exists(group))
+		{
+			CConnectorController.show_stroke_bubblemenu(group, false);
+		}
+		else if (CStrokeController.exists(group))
+		{
+			CStrokeController.show_stroke_bubblemenu(group, false);
 		}
 		else if (group != 0l // the group must exist
 				&& !CGroupController.group_contains_stroke(group, potentialScrap)) // and the group must not contain a
