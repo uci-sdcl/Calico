@@ -330,6 +330,61 @@ public class CImageController
 		
 //		return null;
 	}
+	
+	public static CalicoPacket getImageTransferFilePacket(long uuid, long cuuid, File imageOnDisk)
+	{		
+		byte[] bytes = getBytesFromDisk(imageOnDisk);
+		
+		if (bytes == null || bytes.length == 0)
+			return null;
+		
+		
+		int numPackets = 1;
+		for(int i=0;i<bytes.length;i=i+CalicoOptions.network.cluster_size)
+		{
+			numPackets++;// APPENDs
+		}
+		
+		CalicoPacket imagePacket = CalicoPacket.getPacket(NetworkCommand.IMAGE_TRANSFER_FILE,
+				uuid,
+				cuuid,
+				0l,
+				imageOnDisk.getName(),
+				bytes.length);
+		imagePacket.putBytes(bytes);
+		
+		
+/*		CalicoPacket packet = new CalicoPacket(ByteUtils.SIZE_OF_INT + ByteUtils.SIZE_OF_LONG + ByteUtils.SIZE_OF_INT *2 
+				+ CalicoPacket.getSizeOfPacket(new Object[] {imageOnDisk.getName()})
+				+ ByteUtils.SIZE_OF_INT + bytes.length * ByteUtils.SIZE_OF_BYTE);
+		packet.putInt(NetworkCommand.IMAGE_TRANSFER_FILE);
+		packet.putLong(uuid);
+		packet.putLong(cuuid);
+		packet.putLong(0l);
+		packet.putString(imageOnDisk.getName());
+		packet.putInt(bytes.length);
+		packet.putBytes(bytes);
+*/		
+		return imagePacket;
+
+		
+//		CalicoPacket[] packets = new CalicoPacket[numPackets];
+//		int packetIndex = 1;
+//		for(int i=0;i<bytes.length;i=i+CalicoOptions.network.cluster_size)
+//		{
+//			int numingroup = (i+CalicoOptions.network.cluster_size) > bytes.length ? (bytes.length-i) : CalicoOptions.network.cluster_size;
+//			packets[packetIndex] = new CalicoPacket(1 * numingroup * ByteUtils.SIZE_OF_BYTE);
+//			
+//			for (int j = 0; j < numingroup; j++)
+//			{
+//				packets[packetIndex].putBy
+//			}
+//		}
+		
+		
+		
+//		return null;
+	}
 
 	public static byte[] getBytesFromDisk(File imageOnDisk) {
 		byte[] bytes = null;

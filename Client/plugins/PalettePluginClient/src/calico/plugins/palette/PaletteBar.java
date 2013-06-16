@@ -99,7 +99,7 @@ public class PaletteBar extends PComposite
 //			newChildren.add(new SavePalette());
 //			newChildren.add(new OpenPalette());
 			newChildren.add(new ClosePalette());
-			newChildren.add(new ImportImages());
+//			newChildren.add(new ImportImages());
 //			newChildren.add(new AddCanvasToPalette());	
 //			newChildren.add(new HideMenuBarIcons());
 		}

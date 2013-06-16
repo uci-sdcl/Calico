@@ -1,1 +1,1 @@
-cp ../../trunk/calico3client-bugfixes/dist/calico3client-trunk/calico3client.jar lib/
+cp ../../core/dist/calicoclient-trunk/calicoclient.jar lib/
