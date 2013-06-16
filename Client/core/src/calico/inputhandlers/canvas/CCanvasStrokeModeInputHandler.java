@@ -245,6 +245,12 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 		
 		if(e.isLeftButtonPressed() && hasStartedBge)
 		{
+			//This next part is for line smoothing
+			int xPrev = lastPoint.getPoint().x;
+			int yPrev = lastPoint.getPoint().y;
+			int newX = (int)((double)xPrev + (double)x)/2;
+			int newY = (int)((double)yPrev + (double)y)/2;
+			CStrokeController.append(CStrokeController.getCurrentUUID(), newX, newY);
 			CStrokeController.append(CStrokeController.getCurrentUUID(), x, y);
 
 		}

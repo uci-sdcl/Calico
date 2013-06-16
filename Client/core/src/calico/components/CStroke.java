@@ -379,17 +379,19 @@ public class CStroke extends PPath
 		mousePoints.addPoint(x,y);
 		if (mousePoints.npoints < 2)
 			return;
+		redraw(mousePoints);
+		CalicoDraw.repaintNode(this);
 		
-		PLine line = new PLine();
-		line.setStroke(stroke);
-		line.setStrokePaint(strokePaint);
-		line.addPoint(0, mousePoints.xpoints[mousePoints.npoints-2], mousePoints.ypoints[mousePoints.npoints-2]);
-		line.addPoint(1, x, y);
-		//CCanvasController.canvasdb.get(canvasUID).getLayer().addChild(line);
-		CalicoDraw.addChildToNode(CCanvasController.canvasdb.get(canvasUID).getLayer(), line);
-		this.tempSegments.add(line);
-		//line.repaintFrom(line.getBounds(), line);
-		CalicoDraw.repaintNode(line);
+//		PLine line = new PLine();
+//		line.setStroke(stroke);
+//		line.setStrokePaint(strokePaint);
+//		line.addPoint(0, mousePoints.xpoints[mousePoints.npoints-2], mousePoints.ypoints[mousePoints.npoints-2]);
+//		line.addPoint(1, x, y);
+//		//CCanvasController.canvasdb.get(canvasUID).getLayer().addChild(line);
+//		CalicoDraw.addChildToNode(CCanvasController.canvasdb.get(canvasUID).getLayer(), line);
+//		this.tempSegments.add(line);
+//		//line.repaintFrom(line.getBounds(), line);
+//		CalicoDraw.repaintNode(line);
 		
 		if (!drawTailTarget && Geometry.getPolygonLength(mousePoints) >= CalicoOptions.stroke.min_create_scrap_length
 				&& CalicoDataStore.Mode == CInputMode.EXPERT)
