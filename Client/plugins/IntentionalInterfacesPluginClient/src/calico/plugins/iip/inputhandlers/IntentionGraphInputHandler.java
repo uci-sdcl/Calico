@@ -89,7 +89,8 @@ public class IntentionGraphInputHandler extends CalicoAbstractInputHandler imple
 			PLayer layer = IntentionGraph.getInstance().getLayer(IntentionGraph.Layer.TOOLS);
 			MenuTimer menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, 0l, 100l, CalicoOptions.core.max_hold_distance, 1000,
 					mouseDown, 0l, layer);
-			Ticker.scheduleIn(250, menuTimer);
+			if (event.isLeftButton())
+				Ticker.scheduleIn(250, menuTimer);
 			state = State.BUTTON;
 		}
 
@@ -98,7 +99,11 @@ public class IntentionGraphInputHandler extends CalicoAbstractInputHandler imple
 	@Override
 	public void actionReleased(InputEventInfo event)
 	{
-		if (state == State.PAN)
+		if (state == State.BUTTON && event.isRightButton())
+		{
+			pressAndHoldCompleted();
+		}
+		else if (state == State.PAN)
 		{
 
 		}

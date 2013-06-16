@@ -154,39 +154,24 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 			hasStartedBge = true;
 			mouseDown = e.getPoint();
 			
-			long potentialConnector;
-			long connector;
-			long potentialScrap;
+			boolean triggered = triggeredCanvasObject(e, uuid);
 			
-			if ((potentialScrap = CStrokeController.getPotentialScrap(e.getPoint())) > 0l)
-			{
-				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
-				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), potentialScrap, layer);
+			lastPoint = e;
+			lastPointTime = System.currentTimeMillis();
+			lastStroke = uuid;
+			
+			if (triggered && e.isLeftButton())
 				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
-				this.activeGroup = potentialScrap;
-			} 
-			else if ((potentialConnector = CStrokeController.getPotentialConnector(e.getPoint(), 20)) > 0l)
-			{
-				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
-				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), potentialConnector, layer);
-				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
-				this.activeGroup = potentialConnector;
-			}
-			else if ((connector = CConnectorController.getNearestConnector(e.getPoint(), 20)) > 0l)
-			{
-				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
-				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), connector, layer);
-				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
-				this.activeGroup = connector;
-			}
-			else if (!BubbleMenu.isBubbleMenuActive() &&
-					(this.activeGroup = CGroupController.get_smallest_containing_group_for_point(CCanvasController.getCurrentUUID(), e.getPoint())) != 0l)
-			{
-				PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
-				menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time,
-						e.getPoint(), this.activeGroup, layer);
-				Ticker.scheduleIn(250, menuTimer);
-			}
+//			else if (triggered && e.isRightButton())
+//			{
+//				pressAndHoldCompleted();
+//				calico.inputhandlers.groups.CGroupScrapModeInputHandler.startDrag = false;
+//				CCanvasStrokeModeInputHandler.deleteSmudge = true;
+//				hasBeenPressed = false;
+////				openMenu(0l, this.activeGroup, getLastPoint());
+//			}
+			
+			
 //			menuThread = new DisplayMenuThread(this, e.getGlobalPoint(), e.group);		
 //			Ticker.scheduleIn(CalicoOptions.core.hold_time, menuThread);
 		}
@@ -194,6 +179,50 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 		lastPoint = e;
 		lastPointTime = System.currentTimeMillis();
 		lastStroke = uuid;
+	}
+
+	private boolean triggeredCanvasObject(InputEventInfo e, long uuid) {
+		long potentialConnector;
+		long connector;
+		long potentialScrap;
+		
+		boolean triggered = false;
+		
+		if ((potentialScrap = CStrokeController.getPotentialScrap(e.getPoint())) > 0l)
+		{
+			PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
+			menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), potentialScrap, layer);
+//				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
+			triggered = true;
+			this.activeGroup = potentialScrap;
+		} 
+		else if ((potentialConnector = CStrokeController.getPotentialConnector(e.getPoint(), 20)) > 0l)
+		{
+			PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
+			menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), potentialConnector, layer);
+			triggered = true;
+//				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
+			this.activeGroup = potentialConnector;
+		}
+		else if ((connector = CConnectorController.getNearestConnector(e.getPoint(), 20)) > 0l)
+		{
+			PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
+			menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time, e.getPoint(), connector, layer);
+			triggered = true;
+//				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
+			this.activeGroup = connector;
+		}
+		else if (!BubbleMenu.isBubbleMenuActive() &&
+				(this.activeGroup = CGroupController.get_smallest_containing_group_for_point(CCanvasController.getCurrentUUID(), e.getPoint())) != 0l)
+		{
+			PLayer layer = CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getLayer();
+			menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, uuid, CalicoOptions.core.hold_time/2, CalicoOptions.core.max_hold_distance, CalicoOptions.core.hold_time,
+					e.getPoint(), this.activeGroup, layer);
+//				Ticker.scheduleIn(CalicoOptions.core.hold_time, menuTimer);
+			triggered = true;
+			
+		}
+		return triggered;
 	}
 
 	public void actionDragged(InputEventInfo e)
@@ -343,6 +372,21 @@ public class CCanvasStrokeModeInputHandler extends CalicoAbstractInputHandler
 					//CStrokeController.delete(strokeUID);
 				}
 			}
+		}
+		else if (e.isRightButton())
+		{
+			boolean triggered = triggeredCanvasObject(e, 0l);
+			
+			if (triggered && e.isRightButton())
+				{
+					lastPoint = e;
+					CStrokeController.setCurrentUUID(0l);
+					pressAndHoldCompleted();
+					calico.inputhandlers.groups.CGroupScrapModeInputHandler.startDrag = false;
+					CCanvasStrokeModeInputHandler.deleteSmudge = true;
+					hasBeenPressed = false;
+//					openMenu(0l, this.activeGroup, getLastPoint());
+				}
 		}
 
 		deleteSmudge = false;

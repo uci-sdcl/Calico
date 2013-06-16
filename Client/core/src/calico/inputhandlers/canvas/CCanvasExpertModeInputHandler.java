@@ -181,7 +181,7 @@ public class CCanvasExpertModeInputHandler extends CalicoAbstractInputHandler
 //		this.currentMouseLocation = new Point(e.getX(), e.getY());
 		
 		// reset this (maybe they just tapped it accidentally)
-		if(e.isLeftButton())
+		if(e.isLeftButton() || e.isRightButton())
 		{
 			//logger.debug("LEFT BUTTON ELSE RELEASE");
 			this.parentHandler.routeToHandler_actionReleased(CInputMode.STROKE, e);

@@ -379,7 +379,11 @@ public class CanvasTitlePanel implements StickyItem, CalicoEventListener, Perspe
 			lastPoint = event.getGlobalPoint();
 			synchronized (stateLock)
 			{
-				if ((state == InputState.PRESSED) && ((System.currentTimeMillis() - pressTime) < tapDuration))
+				if (event.isRightButton())
+				{
+					pressAndHoldCompleted();
+				}
+				else if ((state == InputState.PRESSED) && ((System.currentTimeMillis() - pressTime) < tapDuration))
 				{
 //					panel.tap(event.getPoint());
 					Point p = event.getGlobalPoint();
@@ -571,7 +575,8 @@ public class CanvasTitlePanel implements StickyItem, CalicoEventListener, Perspe
 				PLayer layer = CanvasTitlePanel.this.layer;
 				MenuTimer menuTimer = new CalicoAbstractInputHandler.MenuTimer(this, 0l, 100l, CalicoOptions.core.max_hold_distance, 1000,
 						mouseDown, 0l, layer);
-				Ticker.scheduleIn(250, menuTimer);
+				if (event.isLeftButton())
+					Ticker.scheduleIn(250, menuTimer);
 				state = InputState.PRESSED;
 
 				pressTime = System.currentTimeMillis();

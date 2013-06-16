@@ -410,7 +410,7 @@ public class CalicoInputManager
 		}
 		
 		//Only allow left mouse button events right now
-		if (!ev.isLeftButton())
+		if (!ev.isLeftButton() && !ev.isRightButton())
 			return;
 		
 		// Update the "last action" thing

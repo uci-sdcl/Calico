@@ -110,17 +110,17 @@ public class CGroupExpertModeInputHandler extends CalicoAbstractInputHandler
 		
 		this.canvas_uid = CGroupController.groupdb.get(this.uuid).getCanvasUID();
 		
-		if(e.isRightButtonPressed())
+		/*if(e.isRightButtonPressed())
 		{
-			/*this.isWaitingRightHold = true;
+			this.isWaitingRightHold = true;
 			
 			this.currentRightClickTimer = new RightClickTimerTicker(this);
-			Ticker.scheduleIn(CalicoOptions.core.hold_time, this.currentRightClickTimer );*/
+			Ticker.scheduleIn(CalicoOptions.core.hold_time, this.currentRightClickTimer );
 		}
-		else if(e.isLeftButtonPressed())
+		else*/ if(e.isLeftButtonPressed())
 		{
 
-			if (CGroupController.groupdb.get(uuid) instanceof CListDecorator
+			if (e.isLeftButtonPressed() && CGroupController.groupdb.get(uuid) instanceof CListDecorator
 				&& ((CListDecorator)CGroupController.groupdb.get(uuid)).getGroupCheckMarkAtPoint(e.getPoint()) != 0)
 			{
 				CListDecorator list = (CListDecorator)CGroupController.groupdb.get(uuid);
@@ -159,31 +159,32 @@ public class CGroupExpertModeInputHandler extends CalicoAbstractInputHandler
 		this.currentMouseLocation = new Point(e.getX(), e.getY());
 		
 		
-		if(e.isRightButton() && this.isInRightClickMode)/////////////////////////////////////////////
-		{
-//			this.drawRightClickIcon(this.currentMouseLocation);
-			/*
-			if(this.pressPoint!=null)
-			{
-				this.parentHandler.routeToHandler_actionPressed(CInputMode.SCRAP, this.pressPoint);
-				this.pressPoint = null;
-			}
-			
-			this.parentHandler.routeToHandler_actionDragged(CInputMode.SCRAP, e);*/
-		}
-		else if(e.isRightButtonPressed() && this.isWaitingRightHold)/////////////////////////////////////////////
-		{
-			/*if(this.pressedMouseLocation.distance(this.currentMouseLocation)>=CalicoOptions.core.max_hold_distance) // WE EXCEEDED THE THRESHOLD
-			{
-				this.isWaitingRightHold = false;
-				logger.debug("NOT GOING TO ENTER RIGHTCLICK MODE - MOVED TOO FAR");
-
-				this.pressPoint.setButtonAndMask(InputEventInfo.BUTTON_LEFT);
-				this.parentHandler.routeToHandler_actionPressed(CInputMode.SCRAP, this.pressPoint);
-			}*/
-		}
-		else if(calico.inputhandlers.groups.CGroupScrapModeInputHandler.dragging
-				|| calico.inputhandlers.groups.CGroupScrapModeInputHandler.startDrag)
+//		if(e.isRightButton() && this.isInRightClickMode)/////////////////////////////////////////////
+//		{
+////			this.drawRightClickIcon(this.currentMouseLocation);
+//			/*
+//			if(this.pressPoint!=null)
+//			{
+//				this.parentHandler.routeToHandler_actionPressed(CInputMode.SCRAP, this.pressPoint);
+//				this.pressPoint = null;
+//			}
+//			
+//			this.parentHandler.routeToHandler_actionDragged(CInputMode.SCRAP, e);*/
+//		}
+//		else if(e.isRightButtonPressed() && this.isWaitingRightHold)/////////////////////////////////////////////
+//		{
+//			/*if(this.pressedMouseLocation.distance(this.currentMouseLocation)>=CalicoOptions.core.max_hold_distance) // WE EXCEEDED THE THRESHOLD
+//			{
+//				this.isWaitingRightHold = false;
+//				logger.debug("NOT GOING TO ENTER RIGHTCLICK MODE - MOVED TOO FAR");
+//
+//				this.pressPoint.setButtonAndMask(InputEventInfo.BUTTON_LEFT);
+//				this.parentHandler.routeToHandler_actionPressed(CInputMode.SCRAP, this.pressPoint);
+//			}*/
+//		}
+		if(e.isLeftButtonPressed() &&
+				(calico.inputhandlers.groups.CGroupScrapModeInputHandler.dragging
+				|| calico.inputhandlers.groups.CGroupScrapModeInputHandler.startDrag))
 //				e.isRightButtonPressed())/////////////////////////////////////////////
 		{
 			// Reroute to canvas handler
@@ -219,28 +220,26 @@ public class CGroupExpertModeInputHandler extends CalicoAbstractInputHandler
 
 			this.parentHandler.routeToHandler_actionReleased(CInputMode.SCRAP, e);*/
 		}
-		else if(e.isRightButton() && this.isWaitingRightHold)
-		{
-			/*logger.debug("WOULD SHOW MENU");
-			
-			long stroke = CStrokeController.getPotentialScrap(e.getPoint());
-			if (!CGroupController.groupdb.get(uuid).isPermanent())
-				stroke = 0;
-			
-			if (stroke != 0l)
-				CalicoAbstractInputHandler.clickMenu(0l, 0l, e.getPoint());
-			else
-				CGroupController.show_group_piemenu(uuid, e.getGlobalPoint());*/
-
-		}
-		else if(e.isRightButton() && !this.isInRightClickMode)
-		{
-			/*e.setButtonAndMask(InputEventInfo.BUTTON_LEFT);
-			this.parentHandler.routeToHandler_actionReleased(CInputMode.SCRAP, e);*/
-		}
-		
-
-		else if(e.isLeftButton())
+//		else if(e.isRightButton() && this.isWaitingRightHold)
+//		{
+//			/*logger.debug("WOULD SHOW MENU");
+//			
+//			long stroke = CStrokeController.getPotentialScrap(e.getPoint());
+//			if (!CGroupController.groupdb.get(uuid).isPermanent())
+//				stroke = 0;
+//			
+//			if (stroke != 0l)
+//				CalicoAbstractInputHandler.clickMenu(0l, 0l, e.getPoint());
+//			else
+//				CGroupController.show_group_piemenu(uuid, e.getGlobalPoint());*/
+//
+//		}
+//		else if(e.isRightButton() && !this.isInRightClickMode)
+//		{
+//			/*e.setButtonAndMask(InputEventInfo.BUTTON_LEFT);
+//			this.parentHandler.routeToHandler_actionReleased(CInputMode.SCRAP, e);*/
+//		}
+		else if(e.isLeftButton() || e.isRightButton())
 		{
 			CalicoInputManager.rerouteEvent(this.canvas_uid, e);
 		}

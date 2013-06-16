@@ -233,7 +233,7 @@ public class CIntentionCellInputHandler extends CalicoAbstractInputHandler imple
 	{
 		lastLocalMousePoint = event.getPoint();
 		mouseDownTime = System.currentTimeMillis();
-		if (event.isLeftButtonPressed())
+		if (event.isLeftButtonPressed() || event.isRightButton())
 		{
 			synchronized (stateLock)
 			{
@@ -257,7 +257,7 @@ public class CIntentionCellInputHandler extends CalicoAbstractInputHandler imple
 			cellDragAnchor = CIntentionCellController.getInstance().getCellById(currentCellId).getLocation();
 
 			Point2D point = IntentionGraph.getInstance().getLayer(IntentionGraph.Layer.TOOLS).globalToLocal(event.getGlobalPoint());
-			if (state == State.PRESSED)
+			if (state == State.PRESSED && event.isLeftButton())
 				bubbleMenuTimer.start(new Point((int) point.getX(), (int) point.getY()));
 		}
 	}
@@ -322,7 +322,12 @@ public class CIntentionCellInputHandler extends CalicoAbstractInputHandler imple
 					state = State.MENU;
 					break;
 				case PRESSED:
-					if (event.getGlobalPoint().distance(mouseDragAnchor) < DRAG_THRESHOLD
+					if (event.isRightButton())
+					{
+						pressAndHoldCompleted();
+						state = State.MENU;
+					}
+					else if (event.getGlobalPoint().distance(mouseDragAnchor) < DRAG_THRESHOLD
 							&& cell.getVisible())
 					{
 						CCanvasController.loadCanvas(cell.getCanvasId());
@@ -413,25 +418,31 @@ public class CIntentionCellInputHandler extends CalicoAbstractInputHandler imple
 			{
 				synchronized (stateLock)
 				{
-					CIntentionCell cell = CIntentionCellController.getInstance().getCellById(currentCellId);
-					if (state == State.PRESSED
-							&& cell.contains(lastLocalMousePoint))
-					{
-						state = State.MENU;
-						
-						cell.showBubbleMenu();
-
-						state = State.ACTIVATED;
-//						state = State.DRAG;
-//						CIntentionCellController.getInstance().getCellById(currentCellId).moveToFront();
-//						CIntentionCellController.getInstance().getCellById(currentCellId).setDragging(true);
-////						CIntentionCellController.getInstance().getCellById(currentCellId).setIsPinned(true);
-////						Networking.send(IntentionalInterfacesNetworkCommands.CIC_SET_PIN, currentCellId, 1);
-					}
+					pressAndHoldCompleted();
 				}
 			}
 
 
+
+
+		}
+	}
+	
+	private void pressAndHoldCompleted() {
+		CIntentionCell cell = CIntentionCellController.getInstance().getCellById(currentCellId);
+		if (state == State.PRESSED
+				&& cell.contains(lastLocalMousePoint))
+		{
+			state = State.MENU;
+			
+			cell.showBubbleMenu();
+
+			state = State.ACTIVATED;
+//				state = State.DRAG;
+//				CIntentionCellController.getInstance().getCellById(currentCellId).moveToFront();
+//				CIntentionCellController.getInstance().getCellById(currentCellId).setDragging(true);
+////				CIntentionCellController.getInstance().getCellById(currentCellId).setIsPinned(true);
+////				Networking.send(IntentionalInterfacesNetworkCommands.CIC_SET_PIN, currentCellId, 1);
 		}
 	}
 
