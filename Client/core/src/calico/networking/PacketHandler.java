@@ -220,6 +220,7 @@ public class PacketHandler
 			case NetworkCommand.PRESENCE_CANVAS_USERS:PRESENCE_CANVAS_USERS(packet);break;
 			case NetworkCommand.DEFAULT_EMAIL:DEFAULT_EMAIL(packet);break;
 			case NetworkCommand.SERVER_HTTP_PORT:SERVER_HTTP_PORT(packet);break;
+			case NetworkCommand.SERVER_EMAIL_SETTINGS:SERVER_EMAIL_SETTINGS(packet);break;
 			
 		}//command switch
 		
@@ -1620,5 +1621,19 @@ public class PacketHandler
 		p.getInt();
 		
 		CalicoDataStore.ServerHTTPPort = p.getInt();
+	}
+	
+	public static void SERVER_EMAIL_SETTINGS(CalicoPacket p)
+	{
+		p.rewind();
+		p.getInt();
+		
+		CalicoDataStore.email.smtpHost = p.getString();
+		CalicoDataStore.email.smtpPort = p.getInt();
+		CalicoDataStore.email.smtpsAuth = p.getString();
+		CalicoDataStore.email.replyToEmail = p.getString();
+		CalicoDataStore.email.username = p.getString();
+		CalicoDataStore.email.password = p.getString();
+
 	}
 }

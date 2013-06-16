@@ -370,6 +370,13 @@ public class ClientManager
 		CalicoPacket default_email = CalicoPacket.getPacket(NetworkCommand.DEFAULT_EMAIL, COptions.server.default_email);
 		ClientManager.send(client, default_email);
 		ClientManager.send(client, CalicoPacket.getPacket(NetworkCommand.SERVER_HTTP_PORT, COptions.admin.listen.port));
+		ClientManager.send(client, CalicoPacket.getPacket(NetworkCommand.SERVER_EMAIL_SETTINGS, 
+				calico.COptions.server.email.smtpHost, 
+				calico.COptions.server.email.smtpPort,
+				calico.COptions.server.email.smtpsAuth,
+				calico.COptions.server.email.replyToEmail,
+				calico.COptions.server.email.username,
+				calico.COptions.server.email.password));
 		
 		ClientManager.send(client, CalicoPacket.getPacket(NetworkCommand.CANVAS_SET_DIMENSIONS, COptions.canvas.width, COptions.canvas.height));
 		

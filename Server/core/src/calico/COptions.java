@@ -117,7 +117,16 @@ public class COptions
 		{
 			public static String download_folder = "uploads/images/";
 		}
-		
+		public static class email
+		{
+			public static String smtpHost = "smtp.gmail.com";
+			public static int smtpPort = 465;
+			public static String smtpsAuth = "true";
+			public static String replyToEmail = "ucicalicodev@gmail.com";
+			public static String username = "ucicalicodev@gmail.com";
+			public static String password = "calico99";
+		}
+
 		public static String plugins = "";
 	}
 	

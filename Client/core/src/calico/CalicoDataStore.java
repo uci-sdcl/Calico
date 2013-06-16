@@ -72,6 +72,7 @@ public class CalicoDataStore
 	
 	public static String default_email = "";
 	
+	
 	public static boolean enableHitachiStarboardFix = false;
 	
 	/**
@@ -103,6 +104,15 @@ public class CalicoDataStore
 	public static Int2ObjectOpenHashMap<String> clientInfo = new Int2ObjectOpenHashMap<String>();
 	
 	public static String lastOpenedDirectory = "";
+	
+	public static class email {
+		public static String smtpHost = "smtp.gmail.com";
+		public static int smtpPort = 465;
+		public static String smtpsAuth = "true";
+		public static String replyToEmail = "<ucicalicodev@gmail.com>";
+		public static String username = "ucicalicodev@gmail.com";
+		public static String password = "calico99";
+	}
 	
 	/**
 	 * Sets the default options

@@ -112,6 +112,7 @@ public class NetworkCommand
 	public static final int SESSION_START			= 156; // <SESSION> <RandomString>
 	public static final int DEFAULT_EMAIL			= 157; // Default email
 	public static final int SERVER_HTTP_PORT		= 158;
+	public static final int SERVER_EMAIL_SETTINGS	= 159;
 
 	// Messages
 	public static final int STATUS_MESSAGE			= 100; // <MESSAGE>
@@ -399,6 +400,9 @@ public class NetworkCommand
 			formats.put(JOIN,new NetCommandFormat("JOIN","SS"));
 			formats.put(DEFAULT_EMAIL,new NetCommandFormat("DEFAULT_EMAIL","S"));
 			formats.put(SERVER_HTTP_PORT,new NetCommandFormat("SERVER_HTTP_PORT","S"));
+			formats.put(SERVER_EMAIL_SETTINGS, new NetCommandFormat("SERVER_EMAIL_SETTINGS", "SISSSS"));
+			
+			
 			formats.put(HEARTBEAT,new NetCommandFormat("HEARTBEAT","LI"));
 			
 			formats.put(GROUP_START,new NetCommandFormat("GROUP_START","LLLI"));

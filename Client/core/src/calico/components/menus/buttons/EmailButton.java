@@ -124,8 +124,9 @@ public class EmailButton extends CanvasMenuButton
 				(new Thread(
 						new Runnable() { public void run() { 
 							try {
-								send("smtp.gmail.com", 465, CalicoDataStore.Username + " <ucicalicodev@gmail.com>", response.toString(),
-										"Calico Canvas " + CGrid.getCanvasCoord(CCanvasController.getCurrentUUID()) + " - " + time, "Screenshot of Calico Canvas\n\n");
+								send(CalicoDataStore.email.smtpHost, CalicoDataStore.email.smtpPort, CalicoDataStore.Username + " <" + CalicoDataStore.email.replyToEmail + ">", 
+										response.toString(), "Calico Canvas " + CGrid.getCanvasCoord(CCanvasController.getCurrentUUID()) + " - " + time, 
+										"Screenshot of Calico Canvas\n\n");
 							} catch (AddressException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -157,7 +158,7 @@ public class EmailButton extends CanvasMenuButton
 		java.util.Properties props = new java.util.Properties();
 		props.put("mail.smtp.host", smtpHost);
 		props.put("mail.smtp.port", ""+smtpPort);
-		props.put("mail.smtps.auth", "true");
+		props.put("mail.smtps.auth", CalicoDataStore.email.smtpsAuth);
 		Session session = Session.getDefaultInstance(props, null);
 		
 		// Construct the message
@@ -191,7 +192,7 @@ public class EmailButton extends CanvasMenuButton
 		// Send the message
 		Transport t = session.getTransport("smtps");
 	    try {
-			t.connect(smtpHost, "ucicalicodev@gmail.com", "calico99");
+			t.connect(smtpHost, CalicoDataStore.email.username, CalicoDataStore.email.password);
 			t.sendMessage(msg, msg.getAllRecipients());
 	    } finally {
 	    	t.close();
