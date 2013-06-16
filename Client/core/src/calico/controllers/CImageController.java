@@ -181,6 +181,24 @@ public class CImageController
 //	    return imageFile.exists();
 	}
 	
+	public static String getImageLocalPath(final long uuid)
+	{
+		File[] files = (new File(CalicoOptions.images.download_folder + "/")).listFiles(new FilenameFilter() {
+	           public boolean accept(File dir, String name) {
+	                return name.toLowerCase().startsWith(Long.toString(uuid) + ".");
+	                }
+	           }
+	        );
+		
+		String localPath = files[0].getPath();
+		if (File.separatorChar != '/')
+		{
+			localPath = localPath.replace(File.separatorChar, '/');
+		}
+		
+		return localPath;
+	}
+	
 	public static boolean imageExists(long imageUUID)
 	{
 		return getImagePath(imageUUID) != null;

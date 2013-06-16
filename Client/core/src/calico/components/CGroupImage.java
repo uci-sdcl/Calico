@@ -51,6 +51,7 @@ import sun.java2d.pipe.AlphaColorPipe;
 
 import calico.CalicoDataStore;
 import calico.CalicoDraw;
+import calico.CalicoOptions;
 import calico.components.grid.CGrid;
 import calico.controllers.CCanvasController;
 import calico.controllers.CImageController;
@@ -63,8 +64,10 @@ import edu.umd.cs.piccolo.util.PPaintContext;
 public class CGroupImage extends CGroup implements ImageObserver {
 
 	protected String imgURL;
+	protected String serverLocalPath;
 	protected Image image;
 	protected boolean isDownloading = false;
+	
 
 	/**
 	 * 
@@ -88,6 +91,8 @@ public class CGroupImage extends CGroup implements ImageObserver {
 		
 		Rectangle bounds = new Rectangle(imgX, imgY, imageWidth, imageHeight);
 		setShapeToRoundedRectangle(bounds, 0);
+		
+		this.serverLocalPath = localPath;
 //		image.getWidth(this);
 		
 		//The server won't always report the correct host name.
@@ -127,13 +132,34 @@ public class CGroupImage extends CGroup implements ImageObserver {
 	public CalicoPacket[] getUpdatePackets(long uuid, long cuid, long puid,
 			int dx, int dy, boolean captureChildren) {
 		Rectangle bounds = this.getRawPolygon().getBounds();
-		CalicoPacket packet = CalicoPacket.getPacket(
+/*		CalicoPacket packet = CalicoPacket.getPacket(
 				NetworkCommand.GROUP_IMAGE_LOAD, uuid, cuid, puid, "", 0, "", bounds.x
 						+ dx, bounds.y + dy, bounds.width, bounds.height,
 				this.isPermanent, captureChildren, this.rotation, this.scaleX,
 				this.scaleY);	
+*/
 		
-		try {
+//		String urlToImage = CImageController.getImageURL(this.uuid);
+//		String imageLocalPath = CImageController.getImageLocalPath(this.uuid);		
+		CalicoPacket packet = CalicoPacket.getPacket(NetworkCommand.GROUP_IMAGE_LOAD,
+				uuid,
+				cuid,
+				puid,
+				imgURL,
+				CalicoDataStore.ServerHTTPPort,
+				serverLocalPath,
+//				this.imgURL,
+				bounds.x + dx,	//going to be honest here, I'm not sure exactly why the + 10's are necessary, but they are
+				bounds.y + dy, // 
+				bounds.width,
+				bounds.height,
+				this.isPermanent,
+				captureChildren,
+				this.rotation,
+				this.scaleX,
+				this.scaleY);		
+		
+		/*try {
 			//Load the image from the file because it may not already be in memory.
 			Image tempImage = ImageIO.read(new File(CImageController.getImagePath(this.uuid)));
 			//Add the image to the packet
@@ -145,7 +171,7 @@ public class CGroupImage extends CGroup implements ImageObserver {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 
 		return new CalicoPacket[] { packet };
