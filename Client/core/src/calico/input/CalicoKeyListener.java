@@ -27,6 +27,8 @@
  ******************************************************************************/
 package calico.input;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -42,7 +44,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import calico.Calico;
 import calico.CalicoDataStore;
@@ -199,10 +204,28 @@ public class CalicoKeyListener extends KeyAdapter {
 		}
 		
 		
-		String response = JOptionPane.showInputDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
-				  "Create Scrap with Text",
+//		String response = JOptionPane.showInputDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
+//				  "Create Scrap with Text",
+//				  "Please enter text",
+//				  JOptionPane.QUESTION_MESSAGE);
+		JTextArea textArea = new JTextArea("",20,10);
+		textArea.setEditable(true);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		JScrollPane areaScrollPane = new JScrollPane(textArea);
+		areaScrollPane.setVerticalScrollBarPolicy(
+		                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		areaScrollPane.setPreferredSize(new Dimension(250, 250));
+		Object[] inputText = new Object[]{areaScrollPane};
+		String[] options = {"OK", "Cancel"};
+		int responseInt = JOptionPane.showOptionDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
+					inputText,
 				  "Please enter text",
-				  JOptionPane.QUESTION_MESSAGE);
+				  JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+		
+		String response = null;
+		if (responseInt == JOptionPane.OK_OPTION)
+			response = textArea.getText();
 		
 		long new_uuid = 0l;
 		if (response != null && response.length() > 0)

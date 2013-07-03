@@ -66,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
@@ -910,10 +911,19 @@ public class CGroup extends PPath implements Serializable {
 			paintContext.pushTransform(piccoloTextTransform);
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 			g2.setColor(Color.BLACK);
-			int yTextOffset = Geometry.getTextBounds(text).height;
+			
 			g2.setFont(CalicoOptions.group.font);
-			g2.drawString(this.text,
-					(float) (points.getBounds().getX() + CalicoOptions.group.text_padding + CalicoOptions.group.padding), (float) (points.getBounds().getY() + CalicoOptions.group.padding + (points.getBounds().getHeight()+5)/2 - yTextOffset/2));
+			
+			String[] tokens = text.split("\n");
+			int yTextOffset = 0;
+			for (int i = 0; i < tokens.length; i++)
+			{	
+				String token = tokens[i];
+				g2.drawString(token,
+						(float) (points.getBounds().getX() + CalicoOptions.group.text_padding + CalicoOptions.group.padding), 
+						(float) (points.getBounds().getY() + CalicoOptions.group.text_padding + CalicoOptions.group.padding*2.25 + yTextOffset));
+				yTextOffset += Geometry.getTextBounds(token).height;
+			}
 			paintContext.popTransform(piccoloTextTransform);
 			
 		}

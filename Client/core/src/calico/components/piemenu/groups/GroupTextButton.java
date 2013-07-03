@@ -27,9 +27,12 @@
  ******************************************************************************/
 package calico.components.piemenu.groups;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import calico.CalicoDraw;
 import calico.components.piemenu.PieMenuButton;
@@ -69,11 +72,31 @@ public class GroupTextButton extends PieMenuButton
 		//System.out.println("CLICKED GROUP DROP BUTTON");
 //		CGroupController.drop(uuid);
 		String text = CGroupController.groupdb.get(uuid).getText();
-		String response = JOptionPane.showInputDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
-				  "Set scrap text",
-				  text
-				  /*,
-				  JOptionPane.QUESTION_MESSAGE*/);
+//		String response = JOptionPane.showInputDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
+//				  "Set scrap text",
+//				  text
+//				  /*,
+//				  JOptionPane.QUESTION_MESSAGE*/);
+		
+		JTextArea textArea = new JTextArea(text,20,10);
+		textArea.setEditable(true);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		JScrollPane areaScrollPane = new JScrollPane(textArea);
+		areaScrollPane.setVerticalScrollBarPolicy(
+		                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		areaScrollPane.setPreferredSize(new Dimension(250, 250));
+		Object[] inputText = new Object[]{areaScrollPane};
+		String[] options = {"OK", "Cancel"};
+		int responseInt = JOptionPane.showOptionDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
+					inputText,
+				  "Please enter text",
+				  JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+		
+		String response = null;
+		if (responseInt == JOptionPane.OK_OPTION)
+			response = textArea.getText();
+		
 		if (response != null)
 		{
 			CGroupController.set_text(uuid, response);

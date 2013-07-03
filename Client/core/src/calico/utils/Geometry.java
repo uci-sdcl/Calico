@@ -27,6 +27,7 @@
  ******************************************************************************/
 package calico.utils;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -38,6 +39,9 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.StringTokenizer;
+
+import org.apache.http.TokenIterator;
 
 import calico.CalicoOptions;
 
@@ -242,8 +246,14 @@ public class Geometry {
 		Graphics2D g2d = (Graphics2D) new BufferedImage(16, 16,
 				BufferedImage.TYPE_INT_RGB).getGraphics();
 		FontRenderContext frc = g2d.getFontRenderContext();
-		Rectangle fontBounds = f.getStringBounds(t, frc)
-				.getBounds();
+		
+		Rectangle fontBounds = new Rectangle(0,0,0,0);
+		String[] tokens = t.split("\n");
+		for (int i = 0; i < tokens.length; i++)
+		{
+			Rectangle tempD = f.getStringBounds(tokens[i], frc).getBounds();
+			fontBounds.setSize(Math.max(tempD.width, fontBounds.width), fontBounds.height + tempD.height);
+		}
 		return fontBounds;
 	}
 

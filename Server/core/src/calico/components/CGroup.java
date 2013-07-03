@@ -1049,11 +1049,24 @@ public class CGroup {
 			g.setTransform(piccoloTextTransform);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 			g.setColor(Color.BLACK);
-			int yTextOffset = getTextBounds(text, g).height;
 			g.setFont(COptions.group.font);
-			g.drawString(this.text,
-					(float) (points.getBounds().getX() + COptions.group.text_padding + COptions.group.padding), 
-					(float) (pathReferenceShadow.getBounds().getY() + COptions.group.padding + (pathReferenceShadow.getBounds().getHeight())/2 + yTextOffset/4));
+			
+//			int yTextOffset = getTextBounds(text, g).height;
+			
+			String[] tokens = text.split("\n");
+			int yTextOffset = 0;
+			for (int i = 0; i < tokens.length; i++)
+			{	
+				String token = tokens[i];
+				g.drawString(token,
+						(float) (pathReferenceShadow.getBounds().getY() + COptions.group.text_padding + COptions.group.padding), 
+						(float) (pathReferenceShadow.getBounds().getY() + COptions.group.text_padding + COptions.group.padding*2.25 + yTextOffset));
+				yTextOffset += getTextBounds(token, g).height;
+			}
+			
+//			g.drawString(this.text,
+//					(float) (points.getBounds().getX() + COptions.group.text_padding + COptions.group.padding), 
+//					(float) (pathReferenceShadow.getBounds().getY() + COptions.group.padding + (pathReferenceShadow.getBounds().getHeight())/2 + yTextOffset/4));
 			g.setTransform(old);
 			
 		}

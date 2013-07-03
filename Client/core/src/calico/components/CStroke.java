@@ -276,6 +276,9 @@ public class CStroke extends PPath
 		}
 		tempSegments.clear();
 		
+		if (CCanvasController.getCurrentUUID() == getCanvasUUID())
+			CalicoDraw.repaint(this);
+		
 //		this.repaintFrom(this.getBounds(), this);
 		
 //		setPolygon(new Polygon(mousePoints.xpoints, mousePoints.ypoints, mousePoints.npoints));

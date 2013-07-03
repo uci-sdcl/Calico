@@ -27,10 +27,15 @@
  ******************************************************************************/
 package calico.components.piemenu.canvas;
 
+import java.awt.Dimension;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import calico.Calico;
 import calico.CalicoDataStore;
@@ -62,10 +67,30 @@ public class TextCreate extends PieMenuButton {
 	public void onClick(InputEventInfo ev)
 	{
 		super.onClick(ev);
-		String response = JOptionPane.showInputDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
-				  "Create Scrap with Text",
+//		String response = JOptionPane.showInputDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
+//				  "Create Scrap with Text",
+//				  "Please enter text",
+//				  JOptionPane.QUESTION_MESSAGE);
+		
+		final JTextArea textArea = new JTextArea("Create Scrap with Text",20,10);
+		textArea.setEditable(true);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		JScrollPane areaScrollPane = new JScrollPane(textArea);
+		areaScrollPane.setVerticalScrollBarPolicy(
+		                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		areaScrollPane.setPreferredSize(new Dimension(250, 250));
+		Object[] inputText = new Object[]{areaScrollPane};
+		
+		String[] options = {"OK", "Cancel"};
+		int responseInt = JOptionPane.showOptionDialog(CCanvasController.canvasdb.get(CCanvasController.getCurrentUUID()).getComponent(),
+					inputText,
 				  "Please enter text",
-				  JOptionPane.QUESTION_MESSAGE);
+				  JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+		
+		String response = null;
+		if (responseInt == JOptionPane.OK_OPTION)
+			response = textArea.getText();
 		
 		long new_uuid = 0l;
 		if (response != null)

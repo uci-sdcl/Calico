@@ -396,6 +396,7 @@ public class Calico extends JFrame
 			GridPerspective.getInstance().activate();
 			CGridController.getInstance();
 			CGrid.loadGrid();
+			logger.info("Initialized grid");
 		}
 
 
